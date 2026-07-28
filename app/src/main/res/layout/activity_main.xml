@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="50dp">
+
+    <TextView
+        android:id="@+id/itemCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Инвентарь пуст" />
+
+    <Button
+        android:id="@+id/switchWeaponButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сменить оружие" />
+
+    <TextView
+        android:id="@+id/tv_consumable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Аптечек нет" />
+
+    <Button
+        android:id="@+id/btn_consumable_use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Использовать" />
+
+    <TextView
+        android:id="@+id/tv_health_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="HP: 42" />
+
+    <TextView
+        android:id="@+id/tv_summaryCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/btn_value_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+</LinearLayout>

@@ -62,19 +62,18 @@ class MainActivity : AppCompatActivity() {
             val totalValue = primary.calculateValue() + secondary.calculateValue()
             valueCard.text = "Ценность инвентаря: " + totalValue
         }
+    }
 
+    fun calculateTotalDamage(damage: Int, shots: Int): Int {
+        return damage * shots
+    }
 
-        fun calculateTotalDamage(damage: Int, shots: Int): Int {
-            return damage * shots
+    fun classifyDamage(damage: Int): String {
+        val tier = when {
+            damage >= 100 -> "Убойный"
+            damage >= 40 -> "Мощный"
+            else -> "Слабый"
         }
-
-        fun classifyDamage(damage: Int): String {
-            val tier = when {
-                damage >= 100 -> "Убойный"
-                damage >= 40 -> "Мощный"
-                else -> "Слабый"
-            }
-            return tier
-        }
+        return tier
     }
 }

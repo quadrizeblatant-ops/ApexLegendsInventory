@@ -1,8 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
     <TextView
         android:id="@+id/itemCard"
@@ -18,9 +20,9 @@
 
     <TextView
         android:id="@+id/tv_hp_info"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Аптечек нет" />
+        tools:text="тут будет инфа по изм. хп"/>/>
 
     <Button
         android:id="@+id/btn_use"
@@ -30,13 +32,15 @@
 
     <TextView
         android:id="@+id/tv_health_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="HP"/>
 
     <TextView
         android:id="@+id/tv_summaryCard"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="Ценность инвентаря" />
 
     <Button

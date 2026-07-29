@@ -26,11 +26,11 @@ class MainActivity : AppCompatActivity() {
         val itemCard: TextView = findViewById(R.id.itemCard)
         val nextItemButton: Button = findViewById(R.id.btn_next_item)
 
-        val firstSlot: Item = Weapon("R-301", "Rare", 14, 18)
-        val secondSlot: Item = Consumable("Syringe", "Common", 25)
-        val thirdSlot: Item = Grenade("Arc Star", "Rare", 75)
-        val fourthSlot: Item = Weapon("Kraber", "Legendary", 150, 6)
-        val fifthSlot: Item = Consumable("Med Kit", "Rare", 100)
+        val r301 = Weapon("R-301", "Rare", 14, 18)
+        val syringe = Consumable("Syringe", "Common", 25)
+        val arcStar = Grenade("Arc Star", "Rare", 75)
+        val kraber = Weapon("Kraber", "Legendary", 150, 6)
+        val medKit = Consumable("Med Kit", "Rare", 100)
 
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
         val valueCard = findViewById<TextView>(R.id.tv_summaryCard)
         val valueButton = findViewById<Button>(R.id.btn_value_button)
+        val backpack: List<Item> = listOf(r301,syringe, arcStar, kraber, medKit)
+
+        val firstItem = backpack[0]
+        val itemCount = backpack.size
 
 
         var health = 42
@@ -45,33 +49,18 @@ class MainActivity : AppCompatActivity() {
         var shownSlotNumber = 0
 
 
-        var currentItem: Item = firstSlot
+        var currentItem: Item = backpack[0]
 
         nextItemButton.setOnClickListener {
             shownSlotNumber += 1
-            if (shownSlotNumber > 4) {
+            if (shownSlotNumber > backpack.size - 1) {
                 shownSlotNumber = 0
             }
-            val shownSlot = when (shownSlotNumber) {
-                0 -> firstSlot
-                1 -> secondSlot
-                2 -> thirdSlot
-                3 -> fourthSlot
-                else -> fifthSlot
-            }
-
-            itemCard.text = shownSlot.toString()
+            val shownItem = backpack[shownSlotNumber]
+            itemCard.text = shownItem.toString()
             Log.i("govno", "тотал хп $health")
-            currentItem = shownSlot
+            currentItem = shownItem
         }
-
-
-        val primary = Weapon("R-301", "Rare", 14, 18)
-        val secondary = Weapon("Peacekeeper", "Epic", 100, 5)
-        val kraber = Weapon("Kraber", "Legendary", 140, 4)
-        val syringe = Consumable("Syringe", "Common", 25)
-        var weaponNumber = 0
-
 
         useButton.setOnClickListener {
             val capturedItem = currentItem
@@ -97,11 +86,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         switchWeaponButton.setOnClickListener {
+            var weaponNumber = 0
             weaponNumber++
             if (weaponNumber == 3) weaponNumber = 0
             val current = when (weaponNumber) {
-                0 -> primary
-                1 -> secondary
+                0 -> backpack[0]
+                1 -> backpack[1]
                 else -> kraber
             }
             val card = current.toString()
@@ -110,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         valueButton.setOnClickListener {
-            val totalValue = primary.calculateValue() + secondary.calculateValue()
+            val totalValue = backpack[0].calculateValue() + backpack[1].calculateValue()
 
             valueCard.text = "Ценность инвентаря: " + totalValue
         }

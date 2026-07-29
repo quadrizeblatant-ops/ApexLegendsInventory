@@ -2,10 +2,13 @@ package com.huk911.apexlegends
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.huk911.apexlegends.models.Consumable
 import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Item
@@ -17,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        applyInsets()
 
         val itemCard: TextView = findViewById(R.id.itemCard)
         val nextItemButton: Button = findViewById(R.id.btn_next_item)
@@ -126,5 +131,23 @@ class MainActivity : AppCompatActivity() {
             else -> "Слабый"
         }
         return tier
+    }
+
+    private fun applyInsets() {
+        val rootView = findViewById<View>(R.id.main)
+        val basePaddingLeft = rootView.paddingLeft
+        val basePaddingTop = rootView.paddingTop
+        val basePaddingRight = rootView.paddingRight
+        val basePaddingBottom = rootView.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, windowInsets ->
+            val systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                basePaddingLeft + systemBars.left,
+                basePaddingTop + systemBars.top,
+                basePaddingRight + systemBars.right,
+                basePaddingBottom + systemBars.bottom
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 }

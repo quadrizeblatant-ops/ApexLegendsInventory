@@ -24,18 +24,22 @@ class MainActivity : AppCompatActivity() {
         val firstSlot: Item = Weapon("R-301", "Rare", 14, 18)
         val secondSlot: Item = Consumable("Syringe", "Common", 25)
         val thirdSlot: Item = Grenade("Arc Star", "Rare", 75)
+        val fourthSlot: Item = Weapon("Kraber","Legendary", 150, 6)
+        val fifthSlot: Item = Consumable("Med Kit", "Rare", 100)
 
         var shownSlotNumber = 0
 
         nextItemButton.setOnClickListener {
             shownSlotNumber += 1
-            if(shownSlotNumber > 2) {
+            if(shownSlotNumber > 4) {
                 shownSlotNumber = 0
             }
             val shownSlot = when (shownSlotNumber) {
                 0 -> firstSlot
                 1 -> secondSlot
-                else -> thirdSlot
+                2 -> thirdSlot
+                3 -> fourthSlot
+                else -> fifthSlot
             }
             itemCard.text = shownSlot.toString()
         }

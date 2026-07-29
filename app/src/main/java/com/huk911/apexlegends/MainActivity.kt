@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.huk911.apexlegends.models.Consumable
+import com.huk911.apexlegends.models.Grenade
+import com.huk911.apexlegends.models.Item
 import com.huk911.apexlegends.models.Weapon
 
 class MainActivity : AppCompatActivity() {
@@ -16,11 +18,32 @@ class MainActivity : AppCompatActivity() {
         this.enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        val itemCard: TextView = findViewById(R.id.itemCard)
+        val nextItemButton: Button = findViewById(R.id.btn_next_item)
+
+        val firstSlot: Item = Weapon("R-301", "Rare", 14, 18)
+        val secondSlot: Item = Consumable("Syringe", "Common", 25)
+        val thirdSlot: Item = Grenade("Arc Star", "Rare", 75)
+
+        var shownSlotNumber = 0
+
+        nextItemButton.setOnClickListener {
+            shownSlotNumber += 1
+            if(shownSlotNumber > 2) {
+                shownSlotNumber = 0
+            }
+            val shownSlot = when (shownSlotNumber) {
+                0 -> firstSlot
+                1 -> secondSlot
+                else -> thirdSlot
+            }
+            itemCard.text = shownSlot.toString()
+        }
+
         var health = 42
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val consumableCard = findViewById<TextView>(R.id.tv_consumable)
         val consUseButton = findViewById<Button>(R.id.btn_consumable_use)
-        val itemCard = findViewById<TextView>(R.id.itemCard)
         val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
         val valueCard = findViewById<TextView>(R.id.tv_summaryCard)
         val valueButton = findViewById<Button>(R.id.btn_value_button)

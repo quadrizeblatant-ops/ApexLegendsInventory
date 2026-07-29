@@ -18,13 +18,13 @@
         android:text="Сменить оружие" />
 
     <TextView
-        android:id="@+id/tv_consumable"
+        android:id="@+id/tv_hp_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Аптечек нет" />
 
     <Button
-        android:id="@+id/btn_consumable_use"
+        android:id="@+id/btn_use"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Использовать" />
@@ -32,14 +32,13 @@
     <TextView
         android:id="@+id/tv_health_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="HP: 42" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_summaryCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Ценность инвентаря" />
 
     <Button
         android:id="@+id/btn_value_button"

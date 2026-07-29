@@ -28,15 +28,19 @@ class MainActivity : AppCompatActivity() {
         val fifthSlot: Item = Consumable("Med Kit", "Rare", 100)
 
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
-        val consumableCard = findViewById<TextView>(R.id.tv_consumable)
-        val consUseButton = findViewById<Button>(R.id.btn_consumable_use)
+        val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
+        val useButton = findViewById<Button>(R.id.btn_use)
         val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
         val valueCard = findViewById<TextView>(R.id.tv_summaryCard)
         val valueButton = findViewById<Button>(R.id.btn_value_button)
 
+
         var health = 42
+        healthBarCard.text = "HP: $health"
         var shownSlotNumber = 0
-        val currentItem: Item
+
+
+        var currentItem: Item = firstSlot
 
         nextItemButton.setOnClickListener {
             shownSlotNumber += 1
@@ -51,21 +55,9 @@ class MainActivity : AppCompatActivity() {
                 else -> fifthSlot
             }
 
-            if(shownSlot is Consumable) {
-                if (health + shownSlot.healAmount < 100) {
-                    health += shownSlot.healAmount
-                    healthBarCard.text = "HP: " + health
-                    val healCard = shownSlot.name + ": +" + shownSlot.healAmount + " HP"
-                    consumableCard.text = healCard
-                } else {
-                    health = 100
-                    healthBarCard.text = "HP: 100, вы не можете лечиться"
-                }
-            }
-
             itemCard.text = shownSlot.toString()
             Log.i("govno", "тотал хп $health")
-
+            currentItem = shownSlot
         }
 
 
@@ -76,18 +68,28 @@ class MainActivity : AppCompatActivity() {
         var weaponNumber = 0
 
 
-//        consUseButton.setOnClickListener {
-//            if (health + syringe.healAmount < 100) {
-//                health += syringe.healAmount
-//                healthBarCard.text = "HP: " + health
-//                val healCard = syringe.name + ": +" + syringe.healAmount + " HP"
-//                consumableCard.text = healCard
-//            } else {
-//                health = 100
-//                healthBarCard.text = "HP: 100, вы не можете лечиться"
-//            }
-//            Log.i("govno", "тотал хп $health")
-//        }
+        useButton.setOnClickListener {
+            val capturedItem = currentItem
+            when (capturedItem) {
+                is Consumable -> {
+                    if (health + capturedItem.healAmount < 100) {
+                        health += capturedItem.healAmount
+                        setHealthValue(healthBarCard, health)
+                        val healCard = capturedItem.name + ": +" + capturedItem.healAmount + " HP"
+                        hpInfoCard.text = healCard
+                    } else {
+                        health = 100
+                        healthBarCard.text = "HP: 100, вы не можете лечиться"
+                    }
+                }
+                is Grenade -> {
+                    health -= capturedItem.blastDamage
+                    setHealthValue(healthBarCard, health)
+                    hpInfoCard.text = "Вы подвзворвались на " + capturedItem.blastDamage + " урона"
+                }
+            }
+            Log.i("govno", "тотал хп $health")
+        }
 
         switchWeaponButton.setOnClickListener {
             weaponNumber++
@@ -104,8 +106,13 @@ class MainActivity : AppCompatActivity() {
 
         valueButton.setOnClickListener {
             val totalValue = primary.calculateValue() + secondary.calculateValue()
+
             valueCard.text = "Ценность инвентаря: " + totalValue
         }
+    }
+
+    private fun setHealthValue(healthBarCard: TextView, health: Int) {
+        healthBarCard.text = "HP: " + health
     }
 
     fun calculateTotalDamage(damage: Int, shots: Int): Int {

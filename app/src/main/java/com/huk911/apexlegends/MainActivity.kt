@@ -54,8 +54,10 @@ class MainActivity : AppCompatActivity() {
 
         openInventory.setOnClickListener {
             var backpackText = ""
+            var backpackNumber = 0
             for (item in backpack) {
-                backpackText = backpackText + item + "\n"
+                backpackNumber += 1
+                backpackText = backpackText + backpackNumber + ". " + item + "\n"
             }
             val shownText = if (backpack.isEmpty()) "Инвентарь пуст" else backpackText
             inventoryText.text = shownText

@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
         val pickButton = findViewById<Button>(R.id.btn_pickup)
         val dropButton = findViewById<Button>(R.id.btn_drop)
+        val openInventory = findViewById<Button>(R.id.btn_open_inventory)
+        val inventoryText = findViewById<TextView>(R.id.tv_full_inventory)
         val backpack: MutableList<Item> = mutableListOf(r301, syringe, arcStar, kraber, medKit)
 
         val firstItem = backpack[0]
@@ -49,6 +51,15 @@ class MainActivity : AppCompatActivity() {
         var shownSlotNumber = 0
 
         var currentItem: Item = backpack[0]
+
+        openInventory.setOnClickListener {
+            var backpackText = ""
+            for (item in backpack) {
+                backpackText = backpackText + item + "\n"
+            }
+            val shownText = if (backpack.isEmpty()) "Инвентарь пуст" else backpackText
+            inventoryText.text = shownText
+        }
 
         nextItemButton.setOnClickListener {
             if (backpack.isEmpty()) {

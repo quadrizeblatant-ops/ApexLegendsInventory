@@ -54,4 +54,16 @@
         android:layout_height="wrap_content"
         android:text="Выбросить" />
 
+    <TextView
+        android:id="@+id/tv_full_inventory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Инвентарь не открыт" />
+
+    <Button
+        android:id="@+id/btn_open_inventory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Весь инвентарь" />
+
 </LinearLayout>

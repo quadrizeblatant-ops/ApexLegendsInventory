@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
         val valueCard = findViewById<TextView>(R.id.tv_summaryCard)
         val valueButton = findViewById<Button>(R.id.btn_value_button)
         val pickButton = findViewById<Button>(R.id.btn_pickup)
-        val backpack: MutableList<Item> = mutableListOf(r301,syringe, arcStar, kraber, medKit)
+        val dropButton = findViewById<Button>(R.id.btn_drop)
+        val backpack: MutableList<Item> = mutableListOf(r301, syringe, arcStar, kraber, medKit)
 
         val firstItem = backpack[0]
         val itemCount = backpack.size
@@ -49,61 +50,78 @@ class MainActivity : AppCompatActivity() {
         healthBarCard.text = "HP: $health"
         var shownSlotNumber = 0
 
-
         var currentItem: Item = backpack[0]
 
         nextItemButton.setOnClickListener {
-            shownSlotNumber += 1
-            if (shownSlotNumber > backpack.size - 1) {
-                shownSlotNumber = 0
+            if (backpack.isEmpty()) {
+                itemCard.text = "Инвентарь пуст"
+            } else {
+                shownSlotNumber += 1
+                if (shownSlotNumber > backpack.size - 1) {
+                    shownSlotNumber = 0
+                }
+                val shownItem = backpack[shownSlotNumber]
+                itemCard.text = shownItem.toString()
+                Log.i("govno", "тотал хп $health")
+                currentItem = shownItem
             }
-            val shownItem = backpack[shownSlotNumber]
-            itemCard.text = shownItem.toString()
-            Log.i("govno", "тотал хп $health")
-            currentItem = shownItem
         }
 
         useButton.setOnClickListener {
-            val capturedItem = currentItem
-            when (capturedItem) {
-                is Consumable -> {
-                    if (health + capturedItem.healAmount < 100) {
-                        health += capturedItem.healAmount
+            if (backpack.isEmpty()){
+                hpInfoCard.text = "Нечего использовать"
+            } else {
+                val capturedItem = currentItem
+                when (capturedItem) {
+                    is Consumable -> {
+                        if (health + capturedItem.healAmount < 100) {
+                            health += capturedItem.healAmount
+                            setHealthValue(healthBarCard, health)
+                            val healCard =
+                                capturedItem.name + ": +" + capturedItem.healAmount + " HP"
+                            hpInfoCard.text = healCard
+                        } else {
+                            health = 100
+                            healthBarCard.text = "HP: 100, вы не можете лечиться"
+                        }
+                    }
+
+                    is Grenade -> {
+                        health -= capturedItem.blastDamage
                         setHealthValue(healthBarCard, health)
-                        val healCard = capturedItem.name + ": +" + capturedItem.healAmount + " HP"
-                        hpInfoCard.text = healCard
-                    } else {
-                        health = 100
-                        healthBarCard.text = "HP: 100, вы не можете лечиться"
+                        hpInfoCard.text =
+                            "Вы подвзворвались на " + capturedItem.blastDamage + " урона"
                     }
                 }
-                is Grenade -> {
-                    health -= capturedItem.blastDamage
-                    setHealthValue(healthBarCard, health)
-                    hpInfoCard.text = "Вы подвзворвались на " + capturedItem.blastDamage + " урона"
-                }
+                Log.i("govno", "тотал хп $health")
             }
-            Log.i("govno", "тотал хп $health")
         }
 
         switchWeaponButton.setOnClickListener {
-            var weaponNumber = 0
-            weaponNumber++
-            if (weaponNumber == 3) weaponNumber = 0
-            val current = when (weaponNumber) {
-                0 -> backpack[0]
-                1 -> backpack[1]
-                else -> kraber
+            if (backpack.isEmpty()) {
+                itemCard.text = "Инвентарь пуст"
+            } else {
+                var weaponNumber = 0
+                weaponNumber++
+                if (weaponNumber == 3) weaponNumber = 0
+                val current = when (weaponNumber) {
+                    0 -> backpack[0]
+                    1 -> backpack[1]
+                    else -> 0
+                }
+                val card = current.toString()
+                itemCard.text = card
+                Log.i("govno", "button clicked with number $weaponNumber")
             }
-            val card = current.toString()
-            itemCard.text = card
-            Log.i("govno", "button clicked with number $weaponNumber")
         }
 
         valueButton.setOnClickListener {
-            val totalValue = backpack[0].calculateValue() + backpack[1].calculateValue()
-
-            valueCard.text = "Ценность инвентаря: " + totalValue
+            if (backpack.isEmpty()) {
+                valueCard.text = "Ценность: 0, инвентарь пуст"
+            } else {
+                val totalValue = backpack[0].calculateValue() + backpack[1].calculateValue()
+                valueCard.text = "Ценность инвентаря: " + totalValue
+            }
         }
 
         pickButton.setOnClickListener {
@@ -112,6 +130,18 @@ class MainActivity : AppCompatActivity() {
             val itemCount = backpack.size
             itemCard.text = "Подобрано " + shieldCell.name + ". Предметов в инвентаре: " + itemCount
         }
+
+        dropButton.setOnClickListener {
+            if (backpack.isEmpty()) {
+                itemCard.text = "Инвентарь пуст"
+            } else {
+                var itemToDrop = backpack[shownSlotNumber]
+                backpack.removeAt(shownSlotNumber)
+                itemCard.text = "Предмет " + itemToDrop.toString() + " Выброшен нахуй"
+            }
+
+        }
+
     }
 
     private fun setHealthValue(healthBarCard: TextView, health: Int) {

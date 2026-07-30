@@ -66,4 +66,16 @@
         android:layout_height="wrap_content"
         android:text="Весь инвентарь" />
 
+    <TextView
+        android:id="@+id/tv_value_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Тут будет ценность" />
+
+    <Button
+        android:id="@+id/btn_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ценность инвентаря" />
+
 </LinearLayout>

@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         val arcStar = Grenade("Arc Star", "Rare", 75)
         val kraber = Weapon("Kraber", "Legendary", 150, 6)
         val medKit = Consumable("Med Kit", "Rare", 100)
+        val primary = Weapon("R-99", "Rare", 11, 18)
+        val secondary = Weapon("Wingman", "Rare", 45, 6)
 
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         val dropButton = findViewById<Button>(R.id.btn_drop)
         val openInventory = findViewById<Button>(R.id.btn_open_inventory)
         val inventoryText = findViewById<TextView>(R.id.tv_full_inventory)
+        val valueCard = findViewById<TextView>(R.id.tv_value_text)
+        val valueButton = findViewById<Button>(R.id.btn_value)
         val backpack: MutableList<Item> = mutableListOf(r301, syringe, arcStar, kraber, medKit)
 
         val firstItem = backpack[0]
@@ -146,6 +150,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        }
+
+        valueButton.setOnClickListener {
+            var backpackValue = 0
+            val handValue = primary.calculateValue() + secondary.calculateValue()
+            for (item in backpack) {
+                backpackValue += item.calculateValue()
+            }
+            valueCard.text = "Ценность предметов в руках: " + handValue + "\n" +
+                    "Ценность инвентаря: " + backpackValue
         }
 
     }

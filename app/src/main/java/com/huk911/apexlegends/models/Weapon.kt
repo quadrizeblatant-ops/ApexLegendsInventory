@@ -15,6 +15,12 @@ class Weapon(
         return "$name ($rarity), Урон: $damage, $deadlyText Магазин: $magSize"
     }
 
+    override fun calculateValue(): Int {
+        val baseValue = super.calculateValue()
+        return baseValue + damage
+    }
+
+
     override fun toString(): String {
         val baseCard = super.toString()
         return baseCard + ", урон " + damage + ", магазин " + magSize

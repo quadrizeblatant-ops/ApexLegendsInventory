@@ -45,14 +45,20 @@
 
     <Button
         android:id="@+id/btn_value_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ценность инвентаря" />
 
     <Button
         android:id="@+id/btn_next_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Осмотреть рюкзак" />
+
+    <Button
+        android:id="@+id/btn_pickup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Подобрать" />
 
 </LinearLayout>

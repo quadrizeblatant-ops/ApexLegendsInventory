@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
         val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
         val valueCard = findViewById<TextView>(R.id.tv_summaryCard)
         val valueButton = findViewById<Button>(R.id.btn_value_button)
-        val backpack: List<Item> = listOf(r301,syringe, arcStar, kraber, medKit)
+        val pickButton = findViewById<Button>(R.id.btn_pickup)
+        val backpack: MutableList<Item> = mutableListOf(r301,syringe, arcStar, kraber, medKit)
 
         val firstItem = backpack[0]
         val itemCount = backpack.size
@@ -103,6 +104,13 @@ class MainActivity : AppCompatActivity() {
             val totalValue = backpack[0].calculateValue() + backpack[1].calculateValue()
 
             valueCard.text = "Ценность инвентаря: " + totalValue
+        }
+
+        pickButton.setOnClickListener {
+            val shieldCell = Consumable("Shield Cell", "Common", 25)
+            backpack.add(shieldCell)
+            val itemCount = backpack.size
+            itemCard.text = "Подобрано " + shieldCell.name + ". Предметов в инвентаре: " + itemCount
         }
     }
 

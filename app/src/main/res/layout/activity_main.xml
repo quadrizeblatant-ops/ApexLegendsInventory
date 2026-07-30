@@ -36,19 +36,6 @@
         android:layout_height="wrap_content"
         tools:text="HP"/>
 
-    <TextView
-        android:id="@+id/tv_summaryCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Ценность инвентаря" />
-
-    <Button
-        android:id="@+id/btn_value_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ценность инвентаря" />
-
     <Button
         android:id="@+id/btn_next_item"
         android:layout_width="wrap_content"

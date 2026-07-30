@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
         val useButton = findViewById<Button>(R.id.btn_use)
         val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
-        val valueCard = findViewById<TextView>(R.id.tv_summaryCard)
-        val valueButton = findViewById<Button>(R.id.btn_value_button)
         val pickButton = findViewById<Button>(R.id.btn_pickup)
         val dropButton = findViewById<Button>(R.id.btn_drop)
         val backpack: MutableList<Item> = mutableListOf(r301, syringe, arcStar, kraber, medKit)
@@ -115,14 +113,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        valueButton.setOnClickListener {
-            if (backpack.isEmpty()) {
-                valueCard.text = "Ценность: 0, инвентарь пуст"
-            } else {
-                val totalValue = backpack[0].calculateValue() + backpack[1].calculateValue()
-                valueCard.text = "Ценность инвентаря: " + totalValue
-            }
-        }
 
         pickButton.setOnClickListener {
             val shieldCell = Consumable("Shield Cell", "Common", 25)
@@ -138,6 +128,9 @@ class MainActivity : AppCompatActivity() {
                 var itemToDrop = backpack[shownSlotNumber]
                 backpack.removeAt(shownSlotNumber)
                 itemCard.text = "Предмет " + itemToDrop.toString() + " Выброшен нахуй"
+                if (shownSlotNumber > 0) {
+                    shownSlotNumber -= 1
+                }
             }
 
         }

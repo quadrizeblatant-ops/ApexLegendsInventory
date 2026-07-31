@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         val primary = Weapon("R-99", Rarity.RARE, 11, 18)
         val secondary = Weapon("Wingman", Rarity.EPIC, 45, 6)
 
+        var primaryWeapon: Weapon? = null
+
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
         val useButton = findViewById<Button>(R.id.btn_use)
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         val inventoryText = findViewById<TextView>(R.id.tv_full_inventory)
         val valueCard = findViewById<TextView>(R.id.tv_value_text)
         val valueButton = findViewById<Button>(R.id.btn_value)
+        val handCard = findViewById<TextView>(R.id.tv_hand_card)
+        val equipButton = findViewById<Button>(R.id.btn_equip)
         val backpack: MutableList<Item> = mutableListOf(r301, syringe, arcStar, kraber, medKit)
 
         val firstItem = backpack[0]
@@ -54,8 +58,37 @@ class MainActivity : AppCompatActivity() {
         var health = 42
         healthBarCard.text = "HP: $health"
         var shownSlotNumber = 0
-
         var currentItem: Item = backpack[0]
+
+        val handDescription = primaryWeapon?.toString()               // Рука
+        val handText = handDescription ?: "В руках пусто"
+        val previousWeapon = primaryWeapon
+        handCard.text = handText
+        if (previousWeapon != null) {
+            backpack.add(previousWeapon)
+        }
+
+        equipButton.setOnClickListener {
+            if (backpack.isEmpty()) {
+                handCard.text = "В рюкзаке пусто, нечего эквипать"
+            } else {
+                val chosenItem = backpack[shownSlotNumber]
+                if (chosenItem is Weapon) {
+                    backpack.removeAt(shownSlotNumber)
+                    val previousWeapon = primaryWeapon
+                    if (previousWeapon != null) {
+                        backpack.add(previousWeapon)
+                    }
+                    primaryWeapon = chosenItem
+                    if (shownSlotNumber > backpack.size - 1) {
+                        shownSlotNumber = 0
+                    }
+                    handCard.text = primaryWeapon?.toString() ?: "В руках пусто"
+                } else {
+                    handCard.text = "В руки можно взять только одно оружие"
+                }
+            }
+        }
 
         openInventory.setOnClickListener {
             var backpackText = ""
@@ -86,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         useButton.setOnClickListener {
-            if (backpack.isEmpty()){
+            if (backpack.isEmpty()) {
                 hpInfoCard.text = "Нечего использовать"
             } else {
                 val capturedItem = currentItem

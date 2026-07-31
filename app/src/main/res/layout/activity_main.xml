@@ -7,6 +7,18 @@
     android:gravity="center_horizontal">
 
     <TextView
+        android:id="@+id/tv_hand_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="В руках пусто" />
+
+    <Button
+        android:id="@+id/btn_equip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Эквипнуть" />
+
+    <TextView
         android:id="@+id/itemCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

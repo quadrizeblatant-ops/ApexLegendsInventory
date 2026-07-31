@@ -13,6 +13,7 @@ import com.huk911.apexlegends.models.Consumable
 import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Item
 import com.huk911.apexlegends.models.Weapon
+import android.graphics.Color
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,13 +27,13 @@ class MainActivity : AppCompatActivity() {
         val itemCard: TextView = findViewById(R.id.itemCard)
         val nextItemButton: Button = findViewById(R.id.btn_next_item)
 
-        val r301 = Weapon("R-301", "Rare", 14, 18)
-        val syringe = Consumable("Syringe", "Common", 25)
-        val arcStar = Grenade("Arc Star", "Rare", 75)
-        val kraber = Weapon("Kraber", "Legendary", 150, 6)
-        val medKit = Consumable("Med Kit", "Rare", 100)
-        val primary = Weapon("R-99", "Rare", 11, 18)
-        val secondary = Weapon("Wingman", "Rare", 45, 6)
+        val r301 = Weapon("R-301", Rarity.RARE, 14, 18)
+        val syringe = Consumable("Syringe", Rarity.COMMON, 25)
+        val arcStar = Grenade("Arc Star", Rarity.RARE, 75)
+        val kraber = Weapon("Kraber", Rarity.LEGENDARY, 150, 6)
+        val medKit = Consumable("Med Kit", Rarity.RARE, 100)
+        val primary = Weapon("R-99", Rarity.RARE, 11, 18)
+        val secondary = Weapon("Wingman", Rarity.EPIC, 45, 6)
 
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
@@ -77,6 +78,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 val shownItem = backpack[shownSlotNumber]
                 itemCard.text = shownItem.toString()
+                val rarityColor = pickRarityColor(shownItem.rarity)
+                itemCard.setTextColor(rarityColor)
                 Log.i("govno", "тотал хп $health")
                 currentItem = shownItem
             }
@@ -132,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
 
         pickButton.setOnClickListener {
-            val shieldCell = Consumable("Shield Cell", "Common", 25)
+            val shieldCell = Consumable("Shield Cell", Rarity.COMMON, 25)
             backpack.add(shieldCell)
             val itemCount = backpack.size
             itemCard.text = "Подобрано " + shieldCell.name + ". Предметов в инвентаре: " + itemCount
@@ -179,6 +182,13 @@ class MainActivity : AppCompatActivity() {
             else -> "Слабый"
         }
         return tier
+    }
+
+    fun pickRarityColor(rarity: Rarity): Int = when (rarity) {
+        Rarity.COMMON -> Color.GRAY
+        Rarity.RARE -> Color.BLUE
+        Rarity.EPIC -> Color.MAGENTA
+        Rarity.LEGENDARY -> Color.RED
     }
 
     private fun applyInsets() {

@@ -1,8 +1,10 @@
 package com.huk911.apexlegends.models
 
+import com.huk911.apexlegends.Rarity
+
 class Weapon(
     name: String,
-    rarity: String,
+    rarity: Rarity,
     val damage: Int,
     val magSize: Int
 ) : Item(name, rarity) {

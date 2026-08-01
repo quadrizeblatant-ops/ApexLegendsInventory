@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val secondary = Weapon("Wingman", Rarity.EPIC, 45, 6)
 
         var primaryWeapon: Weapon? = null
+        var secondaryWeapon: Weapon? = null
 
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
@@ -47,8 +48,12 @@ class MainActivity : AppCompatActivity() {
         val inventoryText = findViewById<TextView>(R.id.tv_full_inventory)
         val valueCard = findViewById<TextView>(R.id.tv_value_text)
         val valueButton = findViewById<Button>(R.id.btn_value)
-        val handCard = findViewById<TextView>(R.id.tv_hand_card)
+        val handCard = findViewById<TextView>(R.id.tv_main_hand_card)
+        val secHandCard = findViewById<TextView>(R.id.tv_sec_hand_card)
         val equipButton = findViewById<Button>(R.id.btn_equip)
+        val dropHandButton = findViewById<Button>(R.id.btn_drop_from_hand)
+        val dropSecHandButton = findViewById<Button>(R.id.btn_drop_from_sec_hand)
+        val eqiupSecButton = findViewById<Button>(R.id.btn_equip_sec_hand)
         val backpack: MutableList<Item> = mutableListOf(r301, syringe, arcStar, kraber, medKit)
 
         val firstItem = backpack[0]
@@ -66,6 +71,24 @@ class MainActivity : AppCompatActivity() {
         handCard.text = handText
         if (previousWeapon != null) {
             backpack.add(previousWeapon)
+        }
+
+        dropHandButton.setOnClickListener {
+            if (primaryWeapon == null) {
+                handCard.text = "В руках пусто, нечего дропать"
+            } else {
+                primaryWeapon = null
+                handCard.text = "В руках пусто"
+            }
+        }
+
+        dropSecHandButton.setOnClickListener {
+            if (secondaryWeapon == null) {
+                secHandCard.text = "Во втором слоте пусто, нечего дропать"
+            } else {
+                secondaryWeapon = null
+                secHandCard.text = "Во втором слоте пусто"
+            }
         }
 
         equipButton.setOnClickListener {
@@ -86,6 +109,28 @@ class MainActivity : AppCompatActivity() {
                     handCard.text = primaryWeapon?.toString() ?: "В руках пусто"
                 } else {
                     handCard.text = "В руки можно взять только одно оружие"
+                }
+            }
+        }
+
+        eqiupSecButton.setOnClickListener {
+            if (backpack.isEmpty()) {
+                secHandCard.text = "В рюкзаке пусто, нечего эквипать"
+            } else {
+                val chosenItem = backpack[shownSlotNumber]
+                if (chosenItem is Weapon) {
+                    backpack.removeAt(shownSlotNumber)
+                    val previousWeapon = secondaryWeapon
+                    if (previousWeapon != null) {
+                        backpack.add(previousWeapon)
+                    }
+                    secondaryWeapon = chosenItem
+                    if (shownSlotNumber > backpack.size - 1) {
+                        shownSlotNumber = 0
+                    }
+                    secHandCard.text = secondaryWeapon?.toString() ?: "Во втором слоте пусто"
+                } else {
+                    secHandCard.text = "В руки можно взять только одно оружие"
                 }
             }
         }

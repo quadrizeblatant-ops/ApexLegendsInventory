@@ -20,6 +20,9 @@ class Inventory {
     var health = 42
     private var shownSlotNumber = 0
 
+    val shownItem: Item?
+        get() = if (backpack.isEmpty()) null else backpack[shownSlotNumber]
+
     fun moveToNextItem(): Item? {
         if (backpack.isEmpty()) {
             return null

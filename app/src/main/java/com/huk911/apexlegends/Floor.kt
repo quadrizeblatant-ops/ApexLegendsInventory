@@ -15,6 +15,9 @@ class Floor {
 
     private var shownSlotNumber = 0
 
+    val shownItem: Item?
+        get() = if (items.isEmpty()) null else items[shownSlotNumber]
+
     fun moveToNextItem(): Item? {
         if (items.isEmpty()) {
             return null

@@ -103,26 +103,6 @@ class Inventory {
         return false
     }
 
-    fun equipShownWeaponSecondary(): Boolean {
-        if (backpack.isEmpty()) {
-            return false
-        }
-        val chosenItem = backpack[shownSlotNumber]
-        if (chosenItem is Weapon) {
-            backpack.removeAt(shownSlotNumber)
-            val previousWeapon = secondaryWeapon
-            if (previousWeapon != null) {
-                backpack.add(previousWeapon)
-            }
-            secondaryWeapon = chosenItem
-            if (shownSlotNumber > backpack.size - 1) {
-                shownSlotNumber = 0
-            }
-            return true
-        }
-        return false
-    }
-
     fun dropPrimary(): Weapon? {
         val droppedWeapon = primaryWeapon   // снимок: вернём бывшего жильца руки
         primaryWeapon = null

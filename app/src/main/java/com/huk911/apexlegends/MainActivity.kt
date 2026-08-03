@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         val itemCard: TextView = findViewById(R.id.itemCard)
         val nextItemButton: Button = findViewById(R.id.btn_next_item)
+        val backpackCountCard = findViewById<TextView>(R.id.tv_backpack_count)
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
+        val healthProgress = findViewById<ProgressBar>(R.id.progress_health)
         val infoCard = findViewById<TextView>(R.id.tv_hp_info)
         val useButton = findViewById<Button>(R.id.btn_use)
         val pickButton = findViewById<Button>(R.id.btn_pickup)
@@ -35,19 +39,24 @@ class MainActivity : AppCompatActivity() {
         val equipButton = findViewById<Button>(R.id.btn_equip)
         val dropHandButton = findViewById<Button>(R.id.btn_drop_from_hand)
         val dropSecHandButton = findViewById<Button>(R.id.btn_drop_from_sec_hand)
-        val equipSecButton = findViewById<Button>(R.id.btn_equip_sec_hand)
+        val swapButton = findViewById<ImageButton>(R.id.btn_swap)
         val floorCard = findViewById<TextView>(R.id.tv_floor_card)
+        val floorCountCard = findViewById<TextView>(R.id.tv_floor_count)
         val nextFloorItemButton = findViewById<Button>(R.id.btn_next_floor_item)
 
         healthBarCard.text = "HP: " + inventory.health
+        healthProgress.progress = inventory.health
         handCard.text = inventory.primaryWeapon?.toString() ?: "В руках пусто"
         secHandCard.text = inventory.secondaryWeapon?.toString() ?: "Во втором слоте пусто"
+        backpackCountCard.text = "Предметов: " + inventory.backpack.size
+        floorCountCard.text = "На полу: " + floor.items.size
 
         dropHandButton.setOnClickListener {
             val droppedWeapon = inventory.dropPrimary()
             if (droppedWeapon != null) {
                 floor.putDown(droppedWeapon)
                 handCard.text = "В руках пусто"
+                floorCountCard.text = "На полу: " + floor.items.size
             } else {
                 handCard.text = "В руках пусто, нечего дропать"
             }
@@ -58,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             if (droppedWeapon != null) {
                 floor.putDown(droppedWeapon)
                 secHandCard.text = "Во втором слоте пусто"
+                floorCountCard.text = "На полу: " + floor.items.size
             } else {
                 secHandCard.text = "Во втором слоте пусто, нечего дропать"
             }
@@ -70,23 +80,17 @@ class MainActivity : AppCompatActivity() {
                 val isEquipped = inventory.equipShownWeapon()
                 if (isEquipped) {
                     handCard.text = inventory.primaryWeapon?.toString() ?: "В руках пусто"
+                    backpackCountCard.text = "Предметов: " + inventory.backpack.size
                 } else {
                     handCard.text = "В руки можно взять только одно оружие"
                 }
             }
         }
 
-        equipSecButton.setOnClickListener {
-            if (inventory.backpack.isEmpty()) {
-                secHandCard.text = "В рюкзаке пусто, нечего эквипать"
-            } else {
-                val isEquipped = inventory.equipShownWeaponSecondary()
-                if (isEquipped) {
-                    secHandCard.text = inventory.secondaryWeapon?.toString() ?: "Во втором слоте пусто"
-                } else {
-                    secHandCard.text = "В руки можно взять только одно оружие"
-                }
-            }
+        swapButton.setOnClickListener {
+            inventory.swapHands()
+            handCard.text = inventory.primaryWeapon?.toString() ?: "В руках пусто"
+            secHandCard.text = inventory.secondaryWeapon?.toString() ?: "Во втором слоте пусто"
         }
 
         nextItemButton.setOnClickListener {
@@ -116,6 +120,8 @@ class MainActivity : AppCompatActivity() {
             if (takenItem != null) {
                 inventory.pickUp(takenItem)
                 floorCard.text = "Подобран: " + takenItem
+                backpackCountCard.text = "Предметов: " + inventory.backpack.size
+                floorCountCard.text = "На полу: " + floor.items.size
                 val totalValue = inventory.calculateTotalValue()
                 Log.d("Inventory", "Полная ценность инвентаря: " + totalValue)
             } else {
@@ -128,6 +134,8 @@ class MainActivity : AppCompatActivity() {
             if (droppedItem != null) {
                 floor.putDown(droppedItem)
                 itemCard.text = "Выброшен: " + droppedItem
+                backpackCountCard.text = "Предметов: " + inventory.backpack.size
+                floorCountCard.text = "На полу: " + floor.items.size
             } else {
                 itemCard.text = "Рюкзак пуст"
             }
@@ -137,6 +145,8 @@ class MainActivity : AppCompatActivity() {
             val useMessage = inventory.useShownItem()
             infoCard.text = useMessage
             setHealthValue(healthBarCard, inventory.health)
+            healthProgress.progress = inventory.health
+            backpackCountCard.text = "Предметов: " + inventory.backpack.size
         }
     }
 

@@ -55,22 +55,31 @@ class Inventory {
         return when (chosenItem) {
             is Consumable -> {
                 if (health >= 100) {
-                    "HP уже 100, лечиться незачем"
+                    "HP уже 100, лечиться незачем"          // неудача — предмет не тратится
                 } else {
                     health = health + chosenItem.healAmount
                     if (health > 100) {
                         health = 100
                     }
+                    removeUsedItem()
                     chosenItem.name + ": +" + chosenItem.healAmount + " HP"
                 }
             }
 
             is Grenade -> {
                 health = health - chosenItem.blastDamage
+                removeUsedItem()
                 "Вы подорвались на " + chosenItem.blastDamage + " урона"
             }
 
             else -> "Это нельзя использовать"
+        }
+    }
+
+    private fun removeUsedItem() {
+        backpack.removeAt(shownSlotNumber)
+        if (shownSlotNumber > backpack.size - 1) {
+            shownSlotNumber = 0
         }
     }
 
@@ -114,12 +123,16 @@ class Inventory {
         return false
     }
 
-    fun dropPrimary() {
+    fun dropPrimary(): Weapon? {
+        val droppedWeapon = primaryWeapon   // снимок: вернём бывшего жильца руки
         primaryWeapon = null
+        return droppedWeapon
     }
 
-    fun dropSecondary() {
+    fun dropSecondary(): Weapon? {
+        val droppedWeapon = secondaryWeapon
         secondaryWeapon = null
+        return droppedWeapon
     }
 
     fun swapHands() {

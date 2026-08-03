@@ -24,29 +24,23 @@
         android:layout_height="wrap_content"
         android:text="Эквипнуть 1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_equip_sec_hand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Экипнуть 2" />
-
-        <Button
-            android:id="@+id/btn_drop_from_sec_hand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Дропнуть 2" />
-    </LinearLayout>
-
     <Button
         android:id="@+id/btn_drop_from_hand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Дропнуть 1" />
+
+    <Button
+        android:id="@+id/btn_equip_sec_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Экипнуть 2" />
+
+    <Button
+        android:id="@+id/btn_drop_from_sec_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Дропнуть 2" />
 
     <TextView
         android:id="@+id/itemCard"
@@ -55,40 +49,10 @@
         android:text="Инвентарь пуст" />
 
     <Button
-        android:id="@+id/switchWeaponButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Сменить оружие" />
-
-    <TextView
-        android:id="@+id/tv_hp_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="тут будет инфа по изм. хп"/>/>
-
-    <Button
-        android:id="@+id/btn_use"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Использовать" />
-
-    <TextView
-        android:id="@+id/tv_health_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="HP"/>
-
-    <Button
         android:id="@+id/btn_next_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Осмотреть рюкзак" />
-
-    <Button
-        android:id="@+id/btn_pickup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Подобрать" />
 
     <Button
         android:id="@+id/btn_drop"
@@ -97,27 +61,39 @@
         android:text="Выбросить" />
 
     <TextView
-        android:id="@+id/tv_full_inventory"
+        android:id="@+id/tv_floor_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Инвентарь не открыт" />
+        android:text="Пол не осмотрен" />
 
     <Button
-        android:id="@+id/btn_open_inventory"
+        android:id="@+id/btn_next_floor_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Весь инвентарь" />
+        android:text="Осмотреть пол" />
+
+    <Button
+        android:id="@+id/btn_pickup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Подобрать" />
 
     <TextView
-        android:id="@+id/tv_value_text"
+        android:id="@+id/tv_health_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Тут будет ценность" />
+        tools:text="HP" />
 
     <Button
-        android:id="@+id/btn_value"
+        android:id="@+id/btn_use"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ценность инвентаря" />
+        android:text="Использовать" />
+
+    <TextView
+        android:id="@+id/tv_hp_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="тут будет последнее событие" />
 
 </LinearLayout>

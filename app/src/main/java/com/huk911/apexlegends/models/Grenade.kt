@@ -1,7 +1,5 @@
 package com.huk911.apexlegends.models
 
-import com.huk911.apexlegends.Rarity
-
 class Grenade(
     name: String,
     rarity: Rarity,

@@ -14,6 +14,7 @@ import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Item
 import com.huk911.apexlegends.models.Weapon
 import android.graphics.Color
+import com.huk911.apexlegends.models.Rarity
 
 class MainActivity : AppCompatActivity() {
 

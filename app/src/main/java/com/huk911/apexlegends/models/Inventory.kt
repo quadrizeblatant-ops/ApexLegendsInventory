@@ -52,14 +52,10 @@ class Inventory {
         }
     }
 
-    fun swapWeapon(): String {
-        val handDescription = primaryWeapon?.toString()               // Рука
-        val handText = handDescription ?: "В руках пусто"
+    fun swapWeapon() {
         val previousWeapon = primaryWeapon
-        if (previousWeapon != null) {
-            backpack.add(previousWeapon)
-        }
-        return handText
+        primaryWeapon = secondaryWeapon
+        secondaryWeapon = previousWeapon
     }
 
     fun dropPrimaryWeapon(){
@@ -87,7 +83,7 @@ class Inventory {
         return null
     }
 
-    fun equipSecondSelectedWeapon(): String {
+    fun equipSecondSelectedWeapon(): Weapon? {
         val shownItem = backpack[shownSlotNumber]
         if (shownItem is Weapon) {
             backpack.removeAt(shownSlotNumber)
@@ -99,10 +95,9 @@ class Inventory {
             if (shownSlotNumber > backpack.size - 1) {
                 shownSlotNumber = 0
             }
-            return primaryWeapon?.toString() ?: "В руках пусто"
-        } else {
-            return "В руки можно взять только одно оружие"
+            return shownItem
         }
+        return null
     }
     fun dropItem(): String {
         if (backpack.isEmpty()) {

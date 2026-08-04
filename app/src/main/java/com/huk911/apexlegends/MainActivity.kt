@@ -1,7 +1,6 @@
 package com.huk911.apexlegends
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
         val hpInfoCard = findViewById<TextView>(R.id.tv_hp_info)
         val useButton = findViewById<Button>(R.id.btn_use)
-        val switchWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
+        val swapWeaponButton = findViewById<Button>(R.id.switchWeaponButton)
         val pickButton = findViewById<Button>(R.id.btn_pickup)
         val dropButton = findViewById<Button>(R.id.btn_drop)
         val openInventory = findViewById<Button>(R.id.btn_open_inventory)
@@ -43,10 +42,8 @@ class MainActivity : AppCompatActivity() {
         val equipButton = findViewById<Button>(R.id.btn_equip)
         val dropHandButton = findViewById<Button>(R.id.btn_drop_from_hand)
         val dropSecHandButton = findViewById<Button>(R.id.btn_drop_from_sec_hand)
-        val eqiupSecButton = findViewById<Button>(R.id.btn_equip_sec_hand)
+        val eqiupSecondaryButton = findViewById<Button>(R.id.btn_equip_sec_hand)
 
-
-        handCard.text = inventory.swapWeapon()
 
 
         dropHandButton.setOnClickListener {
@@ -76,7 +73,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        eqiupSecButton.setOnClickListener {
+        eqiupSecondaryButton.setOnClickListener {
+            if (inventory.backpack.isEmpty()) {
+                secHandCard.text = "Рюкзак пуст, нечего эквипнуть"
+            } else {
+                val equippedWeapon = inventory.equipSecondSelectedWeapon()
+                secHandCard.text = equippedWeapon.toString()
+            }
         }
 
         openInventory.setOnClickListener {
@@ -110,22 +113,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        switchWeaponButton.setOnClickListener {
-            if (inventory.backpack.isEmpty()) {
-                itemCard.text = "Инвентарь пуст"
-            } else {
-                var weaponNumber = 0
-                weaponNumber++
-                if (weaponNumber == 3) weaponNumber = 0
-                val current = when (weaponNumber) {
-                    0 -> inventory.backpack[0]
-                    1 -> inventory.backpack[1]
-                    else -> 0
-                }
-                val card = current.toString()
-                itemCard.text = card
-                Log.i("govno", "button clicked with number $weaponNumber")
-            }
+        swapWeaponButton.setOnClickListener {
+            inventory.swapWeapon()
+            handCard.text = inventory.primaryWeapon?.toString() ?: "В руке пусто"
+            secHandCard.text = inventory.secondaryWeapon?.toString() ?: "В руке пусто"
         }
 
 

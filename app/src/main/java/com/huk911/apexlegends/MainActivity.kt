@@ -128,11 +128,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         dropButton.setOnClickListener {
-            inventory.dropItem()
-            val inventoryIsEmpty = inventory.dropItem()
-            itemCard.text = inventoryIsEmpty
-            val itemIsDropped = inventory.dropItem()
-            itemCard.text = itemIsDropped
+            val droppedItem = inventory.dropItem()
+            if (droppedItem != null) {
+                itemCard.text = droppedItem.toString() + " Выброшен"
+            } else {
+                itemCard.text = "Нечего выбросить"
+            }
         }
 
         valueButton.setOnClickListener {

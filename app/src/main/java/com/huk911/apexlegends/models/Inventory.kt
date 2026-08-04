@@ -75,9 +75,7 @@ class Inventory {
                 backpack.add(previousWeapon)
             }
             primaryWeapon = shownItem
-            if (shownSlotNumber > backpack.size - 1) {
-                shownSlotNumber = 0
-            }
+            moveToNextItem()
             return shownItem
         }
         return null
@@ -92,24 +90,18 @@ class Inventory {
                 backpack.add(previousWeapon)
             }
             secondaryWeapon = shownItem
-            if (shownSlotNumber > backpack.size - 1) {
-                shownSlotNumber = 0
-            }
+            moveToNextItem()
             return shownItem
         }
         return null
     }
-    fun dropItem(): String {
+    fun dropItem(): Item? {
         if (backpack.isEmpty()) {
-            return "Инвентарь пуст"
-        } else {
-            var itemToDrop = backpack[shownSlotNumber]
-            backpack.removeAt(shownSlotNumber)
-            return  "Предмет " + itemToDrop.toString() + " Выброшен нахуй"
-            if (shownSlotNumber > 0) {
-                shownSlotNumber -= 1
-            }
+            return null
         }
+        val removedItem = backpack.removeAt(shownSlotNumber)
+        moveToNextItem()
+        return removedItem
     }
 
 }

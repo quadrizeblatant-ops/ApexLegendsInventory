@@ -64,7 +64,7 @@
         android:id="@+id/tv_hp_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="тут будет инфа по изм. хп"/>/>
+        tools:text="тут будет инфа по изм. хп"/>
 
     <Button
         android:id="@+id/btn_use"

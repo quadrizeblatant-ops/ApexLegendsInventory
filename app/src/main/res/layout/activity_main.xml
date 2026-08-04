@@ -52,25 +52,19 @@
         android:id="@+id/itemCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Инвентарь пуст" />
-
-    <Button
-        android:id="@+id/switchWeaponButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Сменить оружие" />
-
-    <TextView
-        android:id="@+id/tv_hp_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="тут будет инфа по изм. хп"/>
+        android:text="Инвентарь не осмотрен" />
 
     <Button
         android:id="@+id/btn_use"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Использовать" />
+
+    <Button
+        android:id="@+id/btn_next_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Осмотреть рюкзак" />
 
     <TextView
         android:id="@+id/tv_health_bar"
@@ -79,45 +73,33 @@
         tools:text="HP"/>
 
     <Button
-        android:id="@+id/btn_next_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Осмотреть рюкзак" />
-
-    <Button
-        android:id="@+id/btn_pickup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Подобрать" />
-
-    <Button
         android:id="@+id/btn_drop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Выбросить" />
 
     <TextView
-        android:id="@+id/tv_full_inventory"
+        android:id="@+id/tv_floor_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Инвентарь не открыт" />
+        android:text="Пол не осмотрен" />
 
     <Button
-        android:id="@+id/btn_open_inventory"
+        android:id="@+id/btn_floor_pick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Весь инвентарь" />
+        android:text="Подобрать с пола" />
+
+    <Button
+        android:id="@+id/btn_floor_inspect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Осмотреть пол" />
 
     <TextView
-        android:id="@+id/tv_value_text"
+        android:id="@+id/tv_info_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Тут будет ценность" />
-
-    <Button
-        android:id="@+id/btn_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ценность инвентаря" />
+        tools:text="логи" />
 
 </LinearLayout>

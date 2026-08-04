@@ -32,14 +32,20 @@ class Inventory {
         val shownItem = backpack[shownSlotNumber]
         when (shownItem) {
             is Consumable -> {
-                if (health + shownItem.healAmount < 100) {
-                    health += shownItem.healAmount
-                    val healCard =
-                        shownItem.name + ": +" + shownItem.healAmount + " HP"
-                    return healCard
-                } else {
+                if(health >= 100) {
                     health = 100
                     return "HP: 100, вы не можете лечиться"
+                } else {
+                    val newHealth = health + shownItem.healAmount
+                    if (newHealth > 100) {
+                        health = 100
+                    } else {
+                        health = newHealth
+                    }
+                    backpack.removeAt(shownSlotNumber)
+                    moveToNextItem()
+                    val healCard = shownItem.name + ": +" + shownItem.healAmount + " HP"
+                    return healCard
                 }
             }
 

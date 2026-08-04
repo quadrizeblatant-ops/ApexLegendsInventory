@@ -2,7 +2,7 @@ package com.huk911.apexlegends.models
 
 class Grenade(
     name: String,
-    rarity: String,
+    rarity: Rarity,
     val blastDamage: Int
 ) : Item(name, rarity){
     override fun toString(): String {

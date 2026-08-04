@@ -2,7 +2,7 @@ package com.huk911.apexlegends.models
 
 class Weapon(
     name: String,
-    rarity: String,
+    rarity: Rarity,
     val damage: Int,
     val magSize: Int
 ) : Item(name, rarity) {
@@ -19,6 +19,7 @@ class Weapon(
         val baseValue = super.calculateValue()
         return baseValue + damage
     }
+
 
     override fun toString(): String {
         val baseCard = super.toString()

@@ -2,7 +2,7 @@ package com.huk911.apexlegends.models
 
 class Consumable(
     name: String,
-    rarity: String,
+    rarity: Rarity,
     val healAmount: Int,
 ) : Item(name, rarity){
 

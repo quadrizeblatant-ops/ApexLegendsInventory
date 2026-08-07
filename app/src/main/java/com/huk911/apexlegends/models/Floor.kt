@@ -1,11 +1,18 @@
 package com.huk911.apexlegends.models
 
+import com.huk911.apexlegends.models.Weapon
+
 class Floor {
 
     val items: MutableList<Item> = mutableListOf(
         Weapon("Flatline", Rarity.COMMON, 16, 20),
         Consumable("Shield Battery", Rarity.RARE, 100),
-        Grenade("Thermite", Rarity.RARE, 90)
+        Grenade("Thermite", Rarity.RARE, 90),
+        Weapon("R-301", Rarity.RARE, 14, 18),
+        Consumable("Syringe", Rarity.COMMON, 25),
+        Grenade("Arc Star", Rarity.RARE, 75),
+        Weapon("Kraber", Rarity.LEGENDARY, 150, 6),
+        Consumable("Med Kit", Rarity.RARE, 100)
     )
 
     private var shownSlotNumber = 0

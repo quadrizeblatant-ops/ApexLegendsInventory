@@ -2,11 +2,7 @@ package com.huk911.apexlegends.models
 
 class Inventory {
     val backpack: MutableList<Item> = mutableListOf(
-        Weapon("R-301", Rarity.RARE, 14, 18),
         Consumable("Syringe", Rarity.COMMON, 25),
-        Grenade("Arc Star", Rarity.RARE, 75),
-        Weapon("Kraber", Rarity.LEGENDARY, 150, 6),
-        Consumable("Med Kit", Rarity.RARE, 100)
     )
     var primaryWeapon: Weapon? = null
     var secondaryWeapon: Weapon? = null
@@ -64,12 +60,24 @@ class Inventory {
         secondaryWeapon = previousWeapon
     }
 
-    fun dropPrimaryWeapon(){
-        primaryWeapon = null
+    fun dropPrimaryWeapon(): Item? {
+        if (primaryWeapon == null) {
+            return null
+        } else {
+            val previousWeapon = primaryWeapon
+            primaryWeapon = null
+            return previousWeapon
+        }
     }
 
-    fun dropSecondaryWeapon() {
-        secondaryWeapon = null
+    fun dropSecondaryWeapon(): Item? {
+        if (secondaryWeapon == null) {
+            return null
+        } else {
+            val previousWeapon = secondaryWeapon
+            secondaryWeapon = null
+            return previousWeapon
+        }
     }
 
     fun equipSelectedWeapon(): Weapon? {

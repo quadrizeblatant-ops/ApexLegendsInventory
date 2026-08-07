@@ -12,7 +12,9 @@ import com.huk911.apexlegends.models.Consumable
 import android.graphics.Color
 import com.huk911.apexlegends.models.Floor
 import com.huk911.apexlegends.models.Inventory
+import com.huk911.apexlegends.models.Item
 import com.huk911.apexlegends.models.Rarity
+import com.huk911.apexlegends.models.Weapon
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,20 +62,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         dropHandButton.setOnClickListener {
-            if (inventory.primaryWeapon == null) {
-                handCard.text = "Дропать нечего, в руках пусто"
+            val droppedItem = inventory.dropPrimaryWeapon()
+            if (droppedItem != null) {
+                floor.items.add(droppedItem)
+                handCard.text = "Оружие выброшено на пол"
             } else {
-                inventory.dropPrimaryWeapon()
-                handCard.text = "Оружие дропнуто"
+                handCard.text = "Нечего дропать"
             }
         }
 
         dropSecHandButton.setOnClickListener {
-            if (inventory.secondaryWeapon == null) {
-                handCard.text = "Дропать нечего, в руках пусто"
+            val droppedItem = inventory.dropSecondaryWeapon()
+            if (droppedItem != null) {
+                floor.items.add(droppedItem)
+                secHandCard.text = "Оружие выброшено на пол"
             } else {
-                inventory.dropSecondaryWeapon()
-                handCard.text = "Оружие дропнуто"
+                secHandCard.text = "Нечего дропать"
             }
         }
 

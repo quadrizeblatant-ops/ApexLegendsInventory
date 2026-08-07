@@ -1,100 +1,260 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_main_hand_card"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="В первом слоте пусто" />
+        android:layout_margin="8dp"
+        android:layout_weight="0"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/tv_sec_hand_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Во втором слоте пусто" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
 
-    <Button
-        android:id="@+id/btn_equip"
-        android:layout_width="wrap_content"
+        <ProgressBar
+            android:id="@+id/healthProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+            <TextView
+                android:id="@+id/tv_health_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="HP" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Эквипнуть 1" />
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/tv_main_hand_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="В руке пусто" />
+
+                <Button
+                    android:id="@+id/btn_drop_from_hand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Дропнуть" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <ImageButton
+            android:id="@+id/btn_swap"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Поменять оружие местами"
+            android:src="@drawable/ic_swap" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/tv_sec_hand_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="В руке пусто" />
+
+                <Button
+                    android:id="@+id/btn_drop_from_sec_hand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Дропнуть" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_weight="0"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_items_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Предметов в инвентаре: 1" />
+
+            <TextView
+                android:id="@+id/itemCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Инвентарь не осмотрен" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+
+                <Button
+                    android:id="@+id/btn_next_item"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:layout_margin="8dp"
+                    android:text="Осмотреть" />
+
+                <Button
+                    android:id="@+id/btn_use"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:layout_margin="8dp"
+                    android:text="Использовать" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+                <Button
+                    android:id="@+id/btn_drop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_margin="8dp"
+                    android:text="Выбросить" />
+
+                <Button
+                    android:id="@+id/btn_equip"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="8dp"
+                    android:layout_height="wrap_content"
+                    android:text="Эквипнуть" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_weight="0"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_floor_items_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Предметов: 8" />
+
+            <TextView
+                android:id="@+id/tv_floor_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Пол не осмотрен" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <Button
+                android:id="@+id/btn_floor_inspect"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_margin="8dp"
+                android:text="Осмотреть пол" />
+
+            <Button
+                android:id="@+id/btn_floor_pick"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_margin="8dp"
+                android:text="Подобрать" />
+
+        </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_equip_sec_hand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Экипнуть 2" />
-
-        <Button
-            android:id="@+id/btn_drop_from_sec_hand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Дропнуть 2" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_drop_from_hand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Дропнуть 1" />
-
-    <TextView
-        android:id="@+id/itemCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Инвентарь не осмотрен" />
-
-    <Button
-        android:id="@+id/btn_use"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Использовать" />
-
-    <Button
-        android:id="@+id/btn_next_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Осмотреть рюкзак" />
-
-    <TextView
-        android:id="@+id/tv_health_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="HP"/>
-
-    <Button
-        android:id="@+id/btn_drop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Выбросить" />
-
-    <TextView
-        android:id="@+id/tv_floor_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Пол не осмотрен" />
-
-    <Button
-        android:id="@+id/btn_floor_pick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Подобрать с пола" />
-
-    <Button
-        android:id="@+id/btn_floor_inspect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Осмотреть пол" />
+        android:orientation="vertical"/>
 
     <TextView
         android:id="@+id/tv_info_card"

@@ -1,6 +1,14 @@
 package com.huk911.apexlegends.models
 
 class Inventory {
+
+    val shownItem: Item?
+        get() = if (backpack.isEmpty()) {
+            null
+        } else {
+            backpack[shownSlotNumber]
+        }
+
     val backpack: MutableList<Item> = mutableListOf(
         Consumable("Syringe", Rarity.COMMON, 25),
     )
@@ -24,13 +32,13 @@ class Inventory {
         backpack.add(newItem)
     }
 
-    fun useShownItem(): String {
+    fun useShownItem(): Item? {
         val shownItem = backpack[shownSlotNumber]
         when (shownItem) {
             is Consumable -> {
                 if(health >= 100) {
                     health = 100
-                    return "HP: 100, вы не можете лечиться"
+                    return null
                 } else {
                     val newHealth = health + shownItem.healAmount
                     if (newHealth > 100) {
@@ -40,17 +48,17 @@ class Inventory {
                     }
                     backpack.removeAt(shownSlotNumber)
                     moveToNextItem()
-                    val healCard = shownItem.name + ": +" + shownItem.healAmount + " HP"
-                    return healCard
+                    return shownItem
                 }
             }
-
             is Grenade -> {
                 health -= shownItem.blastDamage
-                return "Вы подвзворвались на " + shownItem.blastDamage + " урона"
+                backpack.removeAt(shownSlotNumber)
+                moveToNextItem()
+                return shownItem
             }
 
-            else -> return "Это нельзя использовать"
+            else -> return null
         }
     }
 
@@ -109,7 +117,7 @@ class Inventory {
         }
         return null
     }
-    fun dropItem(): Item? {
+    fun dropItemFromBackpack(): Item? {
         if (backpack.isEmpty()) {
             return null
         }

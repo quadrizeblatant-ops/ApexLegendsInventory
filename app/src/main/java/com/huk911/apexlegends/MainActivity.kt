@@ -1,5 +1,6 @@
 package com.huk911.apexlegends
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -8,17 +9,39 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.huk911.apexlegends.models.Consumable
 import android.graphics.Color
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import com.huk911.apexlegends.models.Consumable
 import com.huk911.apexlegends.models.Floor
+import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Inventory
-import com.huk911.apexlegends.models.Item
 import com.huk911.apexlegends.models.Rarity
-import com.huk911.apexlegends.models.Weapon
 
 class MainActivity : AppCompatActivity() {
+
+    private val inventory = Inventory()
+    private val floor = Floor()
+
+    private lateinit var itemCard: TextView
+    private lateinit var healthBarCard: TextView
+    private lateinit var infoCard: TextView
+    private lateinit var floorCard: TextView
+    private lateinit var handCard: TextView
+    private lateinit var secHandCard: TextView
+    private lateinit var inventoryCounter: TextView
+    private lateinit var floorCounter: TextView
+    private lateinit var nextItemButton: Button
+    private lateinit var useButton: Button
+    private lateinit var dropButton: Button
+    private lateinit var pickButton: Button
+    private lateinit var floorInspectButton: Button
+    private lateinit var equipButton: Button
+    private lateinit var dropHandButton: Button
+    private lateinit var dropSecHandButton: Button
+    private lateinit var healthProgress: ProgressBar
+    private lateinit var swapButton: ImageButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,82 +50,77 @@ class MainActivity : AppCompatActivity() {
 
         applyInsets()
 
-        val itemCard: TextView = findViewById(R.id.itemCard)
-        val nextItemButton: Button = findViewById(R.id.btn_next_item)
+        itemCard = findViewById(R.id.itemCard)
+        healthBarCard = findViewById(R.id.tv_health_bar)
+        infoCard = findViewById(R.id.tv_info_card)
 
-        val inventory = Inventory()
-        val floor = Floor()
+        nextItemButton = findViewById(R.id.btn_next_item)
 
-        val infoCard = findViewById<TextView>(R.id.tv_info_card)
+        useButton = findViewById(R.id.btn_use)
+        dropButton = findViewById(R.id.btn_drop)
+        swapButton = findViewById(R.id.btn_swap)
 
-        val healthBarCard = findViewById<TextView>(R.id.tv_health_bar)
-        val useButton = findViewById<Button>(R.id.btn_use)
-        val dropButton = findViewById<Button>(R.id.btn_drop)
-        val swapButton = findViewById<ImageButton>(R.id.btn_swap)
+        pickButton = findViewById(R.id.btn_floor_pick)
+        floorInspectButton = findViewById(R.id.btn_floor_inspect)
+        floorCard = findViewById(R.id.tv_floor_card)
 
-        val pickButton = findViewById<Button>(R.id.btn_floor_pick)
-        val floorInspectButton = findViewById<Button>(R.id.btn_floor_inspect)
-        val floorCard = findViewById<TextView>(R.id.tv_floor_card)
-
-        val handCard = findViewById<TextView>(R.id.tv_main_hand_card)
-        val secHandCard = findViewById<TextView>(R.id.tv_sec_hand_card)
-        val equipButton = findViewById<Button>(R.id.btn_equip)
-        val dropHandButton = findViewById<Button>(R.id.btn_drop_from_hand)
-        val dropSecHandButton = findViewById<Button>(R.id.btn_drop_from_sec_hand)
-        val healthProgress: ProgressBar = findViewById(R.id.healthProgress)
-        var inventoryCounter = findViewById<TextView>(R.id.tv_items_counter)
-        val floorCounter = findViewById<TextView>(R.id.tv_floor_items_counter)
+        handCard = findViewById(R.id.tv_main_hand_card)
+        secHandCard = findViewById(R.id.tv_sec_hand_card)
+        equipButton = findViewById(R.id.btn_equip)
+        dropHandButton = findViewById(R.id.btn_drop_from_hand)
+        dropSecHandButton = findViewById(R.id.btn_drop_from_sec_hand)
+        healthProgress = findViewById(R.id.healthProgress)
+        inventoryCounter = findViewById(R.id.tv_items_counter)
+        floorCounter = findViewById(R.id.tv_floor_items_counter)
 
         healthProgress.progress = inventory.health
 
 
         swapButton.setOnClickListener {
             inventory.swapWeapon()
-
-            handCard.text = inventory.primaryWeapon?.toString() ?: "В руке пусто"
-            secHandCard.text = inventory.secondaryWeapon?.toString() ?: "В руке пусто"
+            showInfo("Оружие свапнуто")
+            renderHands()
         }
 
         floorInspectButton.setOnClickListener {
-            val shownItem = floor.moveToNextItem()
-            if (shownItem != null) {
-                floorCard.text = shownItem.toString()
-                val rarityColor = pickRarityColor(shownItem.rarity)
-                floorCard.setTextColor(rarityColor)
-            } else {
-                floorCard.text = "Пол пустой"
-            }
+            floor.moveToNextItem()
+            renderFloor()
         }
 
         dropHandButton.setOnClickListener {
             val droppedItem = inventory.dropPrimaryWeapon()
             if (droppedItem != null) {
-                floor.items.add(droppedItem)
-                handCard.text = "Оружие выброшено на пол"
-                floorCounter.text = "Предметов на полу: " + floor.items.size
+                floor.addItem(droppedItem)
+                showInfo("Предмет выброшен: $droppedItem")
+                renderFloor()
+                renderHands()
             } else {
-                handCard.text = "Нечего дропать"
+                showInfo("Нечего выбрасывать")
             }
+
         }
 
         dropSecHandButton.setOnClickListener {
             val droppedItem = inventory.dropSecondaryWeapon()
             if (droppedItem != null) {
-                floor.items.add(droppedItem)
-                secHandCard.text = "Оружие выброшено на пол"
-                floorCounter.text = "Предметов на полу: " + floor.items.size
+                floor.addItem(droppedItem)
+                showInfo("Предмет выброшен: $droppedItem")
+                renderFloor()
+                renderHands()
             } else {
-                secHandCard.text = "Нечего дропать"
+                showInfo("Нечего выбрасывать")
             }
+
         }
 
         equipButton.setOnClickListener {
-            if (inventory.backpack.isEmpty()) {
-                handCard.text = "Рюкзак пуст, нечего эквипнуть"
+            val equippedItem = inventory.equipSelectedWeapon()
+            if (equippedItem != null) {
+                renderHands()
+                renderBackpack()
+                showInfo("Предмет взят в руку: $equippedItem")
             } else {
-                val equippedWeapon = inventory.equipSelectedWeapon()
-                handCard.text = equippedWeapon.toString()
-                inventoryCounter.text = "Предметов в инвентаре: " + inventory.backpack.size
+                showInfo("Нечего эквипать")
             }
         }
 
@@ -116,71 +134,44 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         nextItemButton.setOnClickListener {
-            val shownItem = inventory.moveToNextItem()
-            if (shownItem != null) {
-                itemCard.text = shownItem.toString()
-                val rarityColor = pickRarityColor(shownItem.rarity)
-                itemCard.setTextColor(rarityColor)
-            } else {
-                itemCard.text = "Рюкзак пуст"
-            }
+            inventory.moveToNextItem()
+            renderBackpack()
         }
         useButton.setOnClickListener {
-            if (inventory.backpack.isEmpty()) {
-                infoCard.text = "Нечего использовать"
-            } else {
-                val resultText = inventory.useShownItem()
-                infoCard.text = resultText
-                healthProgress.progress = inventory.health
-                inventoryCounter.text = "Предметов в рюкзаке: " + inventory.backpack.size
+            val itemUsed = inventory.useShownItem()
+            when (itemUsed) {
+                is Consumable -> showInfo("Подхилено: +" + itemUsed.healAmount + " HP")
+                is Grenade -> showInfo("Подзворвано: -" + itemUsed.blastDamage + " HP")
             }
+            renderBackpack()
+            renderHealth()
         }
 
-
-
         pickButton.setOnClickListener {
-            val takenItem = floor.takeShownItem()
-            if (takenItem != null) {
-                inventory.pickUp(takenItem)
-                infoCard.text = "Подобран предмет " + takenItem.toString()
-                inventoryCounter.text = "Предметов в инвентаре: " + inventory.backpack.size
-                floorCounter.text = "Предметов на полу: " + floor.items.size
+            val pickedItem = floor.takeShownItem()
+            if (pickedItem != null) {
+                inventory.pickUp(pickedItem)
+                renderBackpack()
+                renderFloor()
+                showInfo("Подобран предмет: $pickedItem")
             } else {
-                infoCard.text = "На полу ничего нет"
+                showInfo("Нечего поднимать")
             }
         }
 
         dropButton.setOnClickListener {
-            val droppedItem = inventory.dropItem()
+            val droppedItem = inventory.dropItemFromBackpack()
             if (droppedItem != null) {
                 floor.addItem(droppedItem)
-                infoCard.text = droppedItem.toString() + " Выброшен"
-                inventoryCounter.text = "Предметов в инвентаре: " + inventory.backpack.size
-                floorCounter.text = "Предметов на полу: " + floor.items.size
-            } else {
-                infoCard.text = "Нечего выбросить"
-            }
+                showInfo("Предмет выброшен: $droppedItem")
+                renderFloor()
+                renderBackpack()
+            } else showInfo("Нечего выбрасывать")
         }
+        renderScreen()
     }
 
-    private fun setHealthValue(healthBarCard: TextView, health: Int) {
-        healthBarCard.text = "HP: " + health
-    }
-
-    fun calculateTotalDamage(damage: Int, shots: Int): Int {
-        return damage * shots
-    }
-
-    fun classifyDamage(damage: Int): String {
-        val tier = when {
-            damage >= 100 -> "Убойный"
-            damage >= 40 -> "Мощный"
-            else -> "Слабый"
-        }
-        return tier
-    }
-
-    fun pickRarityColor(rarity: Rarity): Int = when (rarity) {
+    private fun pickRarityColor(rarity: Rarity): Int = when (rarity) {
         Rarity.COMMON -> Color.GRAY
         Rarity.RARE -> Color.BLUE
         Rarity.EPIC -> Color.MAGENTA
@@ -204,4 +195,67 @@ class MainActivity : AppCompatActivity() {
             WindowInsetsCompat.CONSUMED
         }
     }
+
+    private fun renderHands() {
+        handCard.text = inventory.primaryWeapon?.toString() ?: "Рука пуста"
+        secHandCard.text = inventory.secondaryWeapon?.toString() ?: "Рука пуста"
+        dropHandButton.isEnabled = inventory.primaryWeapon != null
+        dropSecHandButton.isEnabled = inventory.secondaryWeapon != null
+        swapButton.isEnabled = inventory.primaryWeapon != null || inventory.secondaryWeapon != null
+    }
+
+    private fun renderBackpack() {
+        val isBackpackEmpty = inventory.backpack.isEmpty()
+        inventoryCounter.text = "Предметов: " + inventory.backpack.size
+        val shownItem = inventory.shownItem
+        if (shownItem != null) {
+            itemCard.text = shownItem.toString()
+            itemCard.setTextColor(pickRarityColor(shownItem.rarity))
+        } else {
+            itemCard.text = "Рюкзак пуст"
+        }
+        nextItemButton.isEnabled = !isBackpackEmpty
+        equipButton.isEnabled = !isBackpackEmpty
+        useButton.isEnabled = !isBackpackEmpty
+        dropButton.isEnabled = !isBackpackEmpty
+    }
+
+    private fun renderFloor() {
+        val isFloorEmpty = floor.items.isEmpty()
+        floorCounter.text = "Предметов на полу: " + floor.items.size
+        val shownItem = floor.shownItem
+        if (shownItem != null) {
+            floorCard.text = shownItem.toString()
+            floorCard.setTextColor(pickRarityColor(shownItem.rarity))
+        } else {
+            floorCard.text = "На полу пусто"
+        }
+        floorInspectButton.isEnabled = !isFloorEmpty
+        pickButton.isEnabled = !isFloorEmpty
+    }
+
+    private fun renderHealth() {
+        healthBarCard.text = "HP: " + inventory.health
+        healthProgress.progress = inventory.health
+        val healthColor = pickHealthColor(inventory.health)
+        healthProgress.progressTintList = ColorStateList.valueOf(healthColor)
+    }
+
+    private fun renderScreen() {
+        renderHands()
+        renderBackpack()
+        renderFloor()
+        renderHealth()
+    }
+
+    private fun showInfo(message: String) {
+        infoCard.text = message
+    }
+
+    fun pickHealthColor(health: Int): Int = when {
+        health >= 70 -> Color.GREEN
+        health >= 30 -> Color.MAGENTA
+        else -> Color.RED
+    }
+
 }

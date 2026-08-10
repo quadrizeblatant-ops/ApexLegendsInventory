@@ -136,11 +136,11 @@
                 android:layout_height="wrap_content"
                 android:text="Предметов в инвентаре: 1" />
 
-            <TextView
-                android:id="@+id/itemCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Инвентарь не осмотрен" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_backpack"
+                android:layout_width="match_parent"
+                android:layout_height="180dp" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,14 +148,6 @@
                 android:orientation="horizontal"
                 android:padding="1dp">
 
-
-                <Button
-                    android:id="@+id/btn_next_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:layout_margin="8dp"
-                    android:text="Осмотреть" />
 
                 <Button
                     android:id="@+id/btn_use"
@@ -215,11 +207,10 @@
                 android:layout_height="wrap_content"
                 android:text="Предметов: 8" />
 
-            <TextView
-                android:id="@+id/tv_floor_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Пол не осмотрен" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_floor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"

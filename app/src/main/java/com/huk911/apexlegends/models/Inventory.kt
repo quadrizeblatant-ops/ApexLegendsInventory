@@ -6,7 +6,7 @@ class Inventory {
         get() = if (backpack.isEmpty()) {
             null
         } else {
-            backpack[shownSlotNumber]
+            backpack[currentSelectedIndex]
         }
 
     val backpack: MutableList<Item> = mutableListOf(
@@ -15,17 +15,17 @@ class Inventory {
     var primaryWeapon: Weapon? = null
     var secondaryWeapon: Weapon? = null
     var health = 42
-    private var shownSlotNumber = 0
+    private var currentSelectedIndex = 0
 
     fun moveToNextItem(): Item? {
         if (backpack.isEmpty()) {
             return null
         }
-        shownSlotNumber += 1
-        if (shownSlotNumber > backpack.size - 1) {
-            shownSlotNumber = 0
+        currentSelectedIndex += 1
+        if (currentSelectedIndex > backpack.size - 1) {
+            currentSelectedIndex = 0
         }
-        return backpack[shownSlotNumber]
+        return backpack[currentSelectedIndex]
     }
 
     fun pickUp(newItem: Item) {
@@ -33,7 +33,7 @@ class Inventory {
     }
 
     fun useShownItem(): Item? {
-        val shownItem = backpack[shownSlotNumber]
+        val shownItem = backpack[currentSelectedIndex]
         when (shownItem) {
             is Consumable -> {
                 if(health >= 100) {
@@ -46,20 +46,27 @@ class Inventory {
                     } else {
                         health = newHealth
                     }
-                    backpack.removeAt(shownSlotNumber)
-                    moveToNextItem()
+                    backpack.removeAt(currentSelectedIndex)
+                    keepSlotInBounds()
                     return shownItem
                 }
             }
             is Grenade -> {
                 health -= shownItem.blastDamage
-                backpack.removeAt(shownSlotNumber)
-                moveToNextItem()
+                backpack.removeAt(currentSelectedIndex)
+                keepSlotInBounds()
                 return shownItem
             }
 
             else -> return null
         }
+    }
+
+    private fun keepSlotInBounds() {
+        if (currentSelectedIndex > backpack.size - 1) {
+            currentSelectedIndex = 0
+        }
+
     }
 
     fun swapWeapon() {
@@ -89,30 +96,30 @@ class Inventory {
     }
 
     fun equipSelectedWeapon(): Weapon? {
-        val shownItem = backpack[shownSlotNumber]
+        val shownItem = backpack[currentSelectedIndex]
         if (shownItem is Weapon) {
-            backpack.removeAt(shownSlotNumber)
+            backpack.removeAt(currentSelectedIndex)
             val previousWeapon = primaryWeapon
             if (previousWeapon != null) {
                 backpack.add(previousWeapon)
             }
             primaryWeapon = shownItem
-            moveToNextItem()
+            keepSlotInBounds()
             return shownItem
         }
         return null
     }
 
     fun equipSecondSelectedWeapon(): Weapon? {
-        val shownItem = backpack[shownSlotNumber]
+        val shownItem = backpack[currentSelectedIndex]
         if (shownItem is Weapon) {
-            backpack.removeAt(shownSlotNumber)
+            backpack.removeAt(currentSelectedIndex)
             val previousWeapon = secondaryWeapon
             if (previousWeapon != null) {
                 backpack.add(previousWeapon)
             }
             secondaryWeapon = shownItem
-            moveToNextItem()
+            keepSlotInBounds()
             return shownItem
         }
         return null
@@ -121,9 +128,17 @@ class Inventory {
         if (backpack.isEmpty()) {
             return null
         }
-        val removedItem = backpack.removeAt(shownSlotNumber)
-        moveToNextItem()
+        val removedItem = backpack.removeAt(currentSelectedIndex)
+        keepSlotInBounds()
         return removedItem
     }
+
+    fun selectSlot(slotNumber: Int) {
+        if (slotNumber < 0 || slotNumber > backpack.size - 1) {
+            return
+        }
+        currentSelectedIndex = slotNumber
+    }
+
 
 }

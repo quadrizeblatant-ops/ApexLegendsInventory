@@ -12,6 +12,8 @@ import androidx.core.view.WindowInsetsCompat
 import android.graphics.Color
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.huk911.apexlegends.models.Consumable
 import com.huk911.apexlegends.models.Floor
 import com.huk911.apexlegends.models.Grenade
@@ -31,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var secHandCard: TextView
     private lateinit var inventoryCounter: TextView
     private lateinit var floorCounter: TextView
-    private lateinit var nextItemButton: Button
     private lateinit var useButton: Button
     private lateinit var dropButton: Button
     private lateinit var pickButton: Button
@@ -42,6 +43,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var healthProgress: ProgressBar
     private lateinit var swapButton: ImageButton
 
+    private val backpackAdapter = BackpackAdapter(inventory)
+
+    private lateinit var backpackList: RecyclerView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +56,16 @@ class MainActivity : AppCompatActivity() {
 
         applyInsets()
 
-        itemCard = findViewById(R.id.itemCard)
+        backpackList = findViewById(R.id.rv_backpack)
+        backpackList.layoutManager = LinearLayoutManager(this)
+        backpackList.adapter = backpackAdapter
+
+
+//        itemCard = findViewById(R.id.itemCard)
         healthBarCard = findViewById(R.id.tv_health_bar)
         infoCard = findViewById(R.id.tv_info_card)
 
-        nextItemButton = findViewById(R.id.btn_next_item)
+
 
         useButton = findViewById(R.id.btn_use)
         dropButton = findViewById(R.id.btn_drop)
@@ -62,7 +73,6 @@ class MainActivity : AppCompatActivity() {
 
         pickButton = findViewById(R.id.btn_floor_pick)
         floorInspectButton = findViewById(R.id.btn_floor_inspect)
-        floorCard = findViewById(R.id.tv_floor_card)
 
         handCard = findViewById(R.id.tv_main_hand_card)
         secHandCard = findViewById(R.id.tv_sec_hand_card)
@@ -133,10 +143,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
-        nextItemButton.setOnClickListener {
-            inventory.moveToNextItem()
-            renderBackpack()
-        }
         useButton.setOnClickListener {
             val itemUsed = inventory.useShownItem()
             when (itemUsed) {
@@ -207,18 +213,12 @@ class MainActivity : AppCompatActivity() {
     private fun renderBackpack() {
         val isBackpackEmpty = inventory.backpack.isEmpty()
         inventoryCounter.text = "Предметов: " + inventory.backpack.size
-        val shownItem = inventory.shownItem
-        if (shownItem != null) {
-            itemCard.text = shownItem.toString()
-            itemCard.setTextColor(pickRarityColor(shownItem.rarity))
-        } else {
-            itemCard.text = "Рюкзак пуст"
-        }
-        nextItemButton.isEnabled = !isBackpackEmpty
+        backpackAdapter.notifyDataSetChanged()
         equipButton.isEnabled = !isBackpackEmpty
         useButton.isEnabled = !isBackpackEmpty
         dropButton.isEnabled = !isBackpackEmpty
     }
+
 
     private fun renderFloor() {
         val isFloorEmpty = floor.items.isEmpty()

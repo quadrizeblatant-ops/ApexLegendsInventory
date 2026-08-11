@@ -11,8 +11,10 @@ class Floor {
         Weapon("R-301", Rarity.RARE, 14, 18),
         Consumable("Syringe", Rarity.COMMON, 25),
         Grenade("Arc Star", Rarity.RARE, 75),
-        Weapon("Kraber", Rarity.LEGENDARY, 150, 6),
-        Consumable("Med Kit", Rarity.RARE, 100)
+        Weapon("Hemlok", Rarity.RARE, 17, 16),
+        Weapon("R-99", Rarity.COMMON, 11, 18),
+        Consumable("Med Kit", Rarity.RARE, 100),
+        Weapon("Kraber", Rarity.LEGENDARY, 150, 6)
     )
 
     private var shownSlotNumber = 0
@@ -49,5 +51,13 @@ class Floor {
 
     fun addItem(item: Item) {
         items.add(item)
+    }
+
+    fun selectSlot(slotNumber: Int) {
+        if (slotNumber < 0 || slotNumber > items.size - 1) {
+            return
+        }
+        shownSlotNumber = slotNumber
+
     }
 }

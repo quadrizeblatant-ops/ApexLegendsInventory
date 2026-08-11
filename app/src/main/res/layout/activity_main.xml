@@ -209,7 +209,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_floor"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         <LinearLayout
@@ -218,13 +218,6 @@
             android:orientation="horizontal"
             android:padding="12dp">
 
-            <Button
-                android:id="@+id/btn_floor_inspect"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:layout_margin="8dp"
-                android:text="Осмотреть пол" />
 
             <Button
                 android:id="@+id/btn_floor_pick"

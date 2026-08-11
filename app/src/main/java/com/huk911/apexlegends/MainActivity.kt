@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var useButton: Button
     private lateinit var dropButton: Button
     private lateinit var pickButton: Button
-    private lateinit var floorInspectButton: Button
     private lateinit var equipButton: Button
     private lateinit var dropHandButton: Button
     private lateinit var dropSecHandButton: Button
@@ -46,6 +45,11 @@ class MainActivity : AppCompatActivity() {
     private val backpackAdapter = BackpackAdapter(inventory)
 
     private lateinit var backpackList: RecyclerView
+
+    private val floorAdapter = FloorAdapter(floor)
+
+    private lateinit var floorList: RecyclerView
+
 
 
 
@@ -60,6 +64,11 @@ class MainActivity : AppCompatActivity() {
         backpackList.layoutManager = LinearLayoutManager(this)
         backpackList.adapter = backpackAdapter
 
+        floorList = findViewById(R.id.rv_floor)
+        floorList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        floorList.adapter = floorAdapter
+
+
 
 //        itemCard = findViewById(R.id.itemCard)
         healthBarCard = findViewById(R.id.tv_health_bar)
@@ -72,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         swapButton = findViewById(R.id.btn_swap)
 
         pickButton = findViewById(R.id.btn_floor_pick)
-        floorInspectButton = findViewById(R.id.btn_floor_inspect)
 
         handCard = findViewById(R.id.tv_main_hand_card)
         secHandCard = findViewById(R.id.tv_sec_hand_card)
@@ -92,10 +100,6 @@ class MainActivity : AppCompatActivity() {
             renderHands()
         }
 
-        floorInspectButton.setOnClickListener {
-            floor.moveToNextItem()
-            renderFloor()
-        }
 
         dropHandButton.setOnClickListener {
             val droppedItem = inventory.dropPrimaryWeapon()
@@ -223,14 +227,7 @@ class MainActivity : AppCompatActivity() {
     private fun renderFloor() {
         val isFloorEmpty = floor.items.isEmpty()
         floorCounter.text = "Предметов на полу: " + floor.items.size
-        val shownItem = floor.shownItem
-        if (shownItem != null) {
-            floorCard.text = shownItem.toString()
-            floorCard.setTextColor(pickRarityColor(shownItem.rarity))
-        } else {
-            floorCard.text = "На полу пусто"
-        }
-        floorInspectButton.isEnabled = !isFloorEmpty
+        floorAdapter.notifyDataSetChanged()
         pickButton.isEnabled = !isFloorEmpty
     }
 

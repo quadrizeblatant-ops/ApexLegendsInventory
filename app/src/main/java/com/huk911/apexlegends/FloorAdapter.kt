@@ -14,7 +14,7 @@ class FloorAdapter (private val floor: Floor) :
     RecyclerView.Adapter<FloorAdapter.FloorViewHolder>() {
 
     class FloorViewHolder(val rowView: View) : RecyclerView.ViewHolder(rowView) {
-        val rowCard: TextView = rowView.findViewById(R.id.tv_row_item)
+        val rowCardFloor: TextView = rowView.findViewById(R.id.tv_row_item_floor)
         val valueCard: TextView = rowView.findViewById(R.id.tv_value)
     }
 
@@ -22,18 +22,18 @@ class FloorAdapter (private val floor: Floor) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FloorViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val rowView = inflater.inflate(R.layout.item_row, parent, false)
+        val rowView = inflater.inflate(R.layout.floor_row, parent, false)
         return FloorViewHolder(rowView)
     }
 
     override fun onBindViewHolder(holder: FloorViewHolder, position: Int) {
         val item = floor.items[position]
-        holder.rowCard.text = item.name
+        holder.rowCardFloor.text = item.name
         holder.valueCard.text = "Ценность: " + item.calculateValue()
 
         if (item.rarity == Rarity.LEGENDARY) {
-            holder.rowCard.setTextColor(pickRarityColor(item.rarity))
-        } else holder.rowCard.setTextColor(Color.BLACK)
+            holder.rowCardFloor.setTextColor(pickRarityColor(item.rarity))
+        } else holder.rowCardFloor.setTextColor(Color.BLACK)
 
         val isSelected = (item === floor.shownItem)
         if (isSelected) {

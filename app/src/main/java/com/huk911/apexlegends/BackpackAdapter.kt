@@ -28,7 +28,7 @@ class BackpackAdapter(private val inventory: Inventory) :
         val item = inventory.backpack[position]
         holder.rowCard.text = item.toString()
         holder.rowCard.setTextColor(pickRarityColor(item.rarity))
-        val isSelected = (item === inventory.shownItem)
+        val isSelected = (item === inventory.currentSelectedItem)
         if (isSelected) {
             holder.rowView.setBackgroundColor(Color.LTGRAY)
         } else {

@@ -5,7 +5,7 @@ class Weapon(
     rarity: Rarity,
     val damage: Int,
     val magSize: Int
-) : Item(name, rarity) {
+) : Item(name, rarity), Recyclable {
     fun getCard(): String {
         val deadlyText = if (isDeadly) {
             "(Deadly)"
@@ -21,6 +21,7 @@ class Weapon(
     }
 
 
+
     override fun toString(): String {
         val baseCard = super.toString()
         return baseCard + ", урон " + damage + ", магазин " + magSize
@@ -28,4 +29,13 @@ class Weapon(
 
     val isDeadly: Boolean
         get() = damage >= 100
+
+    override fun calculateScrapMaterials(): Int {
+        return when (rarity) {
+             Rarity.COMMON -> 10
+             Rarity.RARE -> 20
+             Rarity.EPIC -> 30
+             Rarity.LEGENDARY -> 40
+         }
+    }
 }

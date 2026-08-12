@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.graphics.Color
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,21 +19,24 @@ import com.huk911.apexlegends.models.Consumable
 import com.huk911.apexlegends.models.Floor
 import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Inventory
+import com.huk911.apexlegends.models.KnockdownWatcher
 import com.huk911.apexlegends.models.Rarity
+import com.huk911.apexlegends.models.Recyclable
+import com.huk911.apexlegends.models.Weapon
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KnockdownWatcher {
 
     private val inventory = Inventory()
     private val floor = Floor()
-
-    private lateinit var itemCard: TextView
     private lateinit var healthBarCard: TextView
     private lateinit var infoCard: TextView
-    private lateinit var floorCard: TextView
     private lateinit var handCard: TextView
     private lateinit var secHandCard: TextView
     private lateinit var inventoryCounter: TextView
     private lateinit var floorCounter: TextView
+    private lateinit var materialsCard: TextView
+
+    private lateinit var recycleButton: Button
     private lateinit var useButton: Button
     private lateinit var dropButton: Button
     private lateinit var pickButton: Button
@@ -69,12 +73,11 @@ class MainActivity : AppCompatActivity() {
         floorList.adapter = floorAdapter
 
 
+        recycleButton = findViewById(R.id.btn_recycle)
+        materialsCard = findViewById(R.id.tv_materials)
 
-//        itemCard = findViewById(R.id.itemCard)
         healthBarCard = findViewById(R.id.tv_health_bar)
         infoCard = findViewById(R.id.tv_info_card)
-
-
 
         useButton = findViewById(R.id.btn_use)
         dropButton = findViewById(R.id.btn_drop)
@@ -93,11 +96,23 @@ class MainActivity : AppCompatActivity() {
 
         healthProgress.progress = inventory.health
 
+        inventory.knockdownWatcher = this
 
         swapButton.setOnClickListener {
             inventory.swapWeapon()
             showInfo("Оружие свапнуто")
             renderHands()
+        }
+
+        recycleButton.setOnClickListener {
+            val recycledItem = inventory.recycleCurrentSelectedItem()
+            if (recycledItem is Recyclable) {
+               val scrapMaterials = recycledItem.calculateScrapMaterials()
+               showInfo("Переработано: " + recycledItem.name + "+ " + scrapMaterials + " материалов")
+            } else {
+                showInfo("Это нельзя переработать")
+            }
+            renderBackpack()
         }
 
 
@@ -138,17 +153,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        eqiupSecondaryButton.setOnClickListener {
-//            if (inventory.backpack.isEmpty()) {
-//                secHandCard.text = "Рюкзак пуст, нечего эквипнуть"
-//            } else {
-//                val equippedWeapon = inventory.equipSecondSelectedWeapon()
-//                secHandCard.text = equippedWeapon.toString()
-//            }
-//        }
-
         useButton.setOnClickListener {
-            val itemUsed = inventory.useShownItem()
+            val itemUsed = inventory.useCurrentSelectedItem()
             when (itemUsed) {
                 is Consumable -> showInfo("Подхилено: +" + itemUsed.healAmount + " HP")
                 is Grenade -> showInfo("Подзворвано: -" + itemUsed.blastDamage + " HP")
@@ -179,13 +185,6 @@ class MainActivity : AppCompatActivity() {
             } else showInfo("Нечего выбрасывать")
         }
         renderScreen()
-    }
-
-    private fun pickRarityColor(rarity: Rarity): Int = when (rarity) {
-        Rarity.COMMON -> Color.GRAY
-        Rarity.RARE -> Color.BLUE
-        Rarity.EPIC -> Color.MAGENTA
-        Rarity.LEGENDARY -> Color.RED
     }
 
     private fun applyInsets() {
@@ -221,6 +220,8 @@ class MainActivity : AppCompatActivity() {
         equipButton.isEnabled = !isBackpackEmpty
         useButton.isEnabled = !isBackpackEmpty
         dropButton.isEnabled = !isBackpackEmpty
+//        recycleButton.isEnabled = inventory.currentSelectedItem is Recyclable
+        materialsCard.text = "Материалов: " + inventory.materials
     }
 
 
@@ -255,4 +256,11 @@ class MainActivity : AppCompatActivity() {
         else -> Color.RED
     }
 
+    override fun onPlayerKnocked() {
+        Log.i("govno", "knocked")
+    }
+
+    override fun onPlayerRevived() {
+        Log.i("govno", "revived")
+    }
 }

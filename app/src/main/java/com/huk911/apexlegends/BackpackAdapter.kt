@@ -8,9 +8,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.huk911.apexlegends.models.Inventory
+import com.huk911.apexlegends.models.Item
+import com.huk911.apexlegends.models.KnockdownWatcher
 import com.huk911.apexlegends.models.Rarity
+import com.huk911.apexlegends.models.SelectionWatcher
+
 class BackpackAdapter(private val inventory: Inventory) :
     RecyclerView.Adapter<BackpackAdapter.BackpackViewHolder>() {
+
+    var selectionWatcher: SelectionWatcher? = null
 
     class BackpackViewHolder(val rowView: View) : RecyclerView.ViewHolder(rowView) {
         val rowCard: TextView = rowView.findViewById(R.id.tv_row_item)
@@ -37,10 +43,9 @@ class BackpackAdapter(private val inventory: Inventory) :
 
         holder.rowView.setOnClickListener {
             inventory.selectSlot(position)
-            notifyDataSetChanged()
+            selectionWatcher?.onItemSelected(item)
         }
     }
-
 }
 
     private fun pickRarityColor(rarity: Rarity): Int = when (rarity) {

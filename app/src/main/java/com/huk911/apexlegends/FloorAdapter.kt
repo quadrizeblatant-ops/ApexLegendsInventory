@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.huk911.apexlegends.models.Floor
-import com.huk911.apexlegends.models.Inventory
 import com.huk911.apexlegends.models.Rarity
 
 class FloorAdapter (private val floor: Floor) :
@@ -35,7 +34,7 @@ class FloorAdapter (private val floor: Floor) :
             holder.rowCardFloor.setTextColor(pickRarityColor(item.rarity))
         } else holder.rowCardFloor.setTextColor(Color.BLACK)
 
-        val isSelected = (item === floor.shownItem)
+        val isSelected = (item === floor.currentSelectedItem)
         if (isSelected) {
             holder.rowView.setBackgroundColor(Color.LTGRAY)
         } else {

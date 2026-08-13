@@ -20,12 +20,13 @@ import com.huk911.apexlegends.models.Consumable
 import com.huk911.apexlegends.models.Floor
 import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Inventory
+import com.huk911.apexlegends.models.Item
 import com.huk911.apexlegends.models.KnockdownWatcher
-import com.huk911.apexlegends.models.Rarity
 import com.huk911.apexlegends.models.Recyclable
+import com.huk911.apexlegends.models.SelectionWatcher
 import com.huk911.apexlegends.models.Weapon
 
-class MainActivity : AppCompatActivity(), KnockdownWatcher {
+class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
     private val inventory = Inventory()
     private val floor = Floor()
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
     private lateinit var materialsCard: TextView
 
     private lateinit var recycleButton: Button
+    private lateinit var recycleFloorButton: Button
     private lateinit var useButton: Button
     private lateinit var dropButton: Button
     private lateinit var pickButton: Button
@@ -88,6 +90,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
         swapButton = findViewById(R.id.btn_swap)
 
         pickButton = findViewById(R.id.btn_floor_pick)
+        recycleFloorButton = findViewById(R.id.btn_recycle_floor)
 
         handCard = findViewById(R.id.tv_main_hand_card)
         secHandCard = findViewById(R.id.tv_sec_hand_card)
@@ -101,6 +104,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
         healthProgress.progress = inventory.health
 
         inventory.knockdownWatcher = this
+        backpackAdapter.selectionWatcher = this
 
         swapButton.setOnClickListener {
             inventory.swapWeapon()
@@ -119,6 +123,19 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
             if (recycledItem is Recyclable) {
                val scrapMaterials = recycledItem.calculateScrapMaterials()
                showInfo("Переработано: " + recycledItem.name + "+ " + scrapMaterials + " материалов")
+            } else {
+                showInfo("Это нельзя переработать")
+            }
+            renderBackpack()
+        }
+
+        recycleFloorButton.setOnClickListener {
+            val selectedItem = floor.currentSelectedItem
+            if (selectedItem is Recyclable) {
+                floor.takeCurrentSelectedItem()
+                inventory.recycle(selectedItem)
+                val scrapMaterials = selectedItem.calculateScrapMaterials()
+                showInfo("Переработано: " + selectedItem.name + " + " + scrapMaterials + " Материалов")
             } else {
                 showInfo("Это нельзя переработать")
             }
@@ -174,7 +191,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
         }
 
         pickButton.setOnClickListener {
-            val pickedItem = floor.takeShownItem()
+            val pickedItem = floor.takeCurrentSelectedItem()
             if (pickedItem != null) {
                 inventory.pickUp(pickedItem)
                 renderBackpack()
@@ -227,7 +244,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
         val isBackpackEmpty = inventory.backpack.isEmpty()
         inventoryCounter.text = "Предметов: " + inventory.backpack.size
         backpackAdapter.notifyDataSetChanged()
-        equipButton.isEnabled = !isBackpackEmpty
+        equipButton.isEnabled = !isBackpackEmpty && inventory.currentSelectedItem is Weapon
         useButton.isEnabled = !isBackpackEmpty
         dropButton.isEnabled = !isBackpackEmpty
 //        recycleButton.isEnabled = inventory.currentSelectedItem is Recyclable
@@ -273,5 +290,9 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
 
     override fun onPlayerRevived() {
         Log.i("govno", "revived")
+    }
+
+    override fun onItemSelected(item: Item) {
+        renderBackpack()
     }
 }

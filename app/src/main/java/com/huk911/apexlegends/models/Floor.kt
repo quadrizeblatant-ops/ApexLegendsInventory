@@ -1,7 +1,5 @@
 package com.huk911.apexlegends.models
 
-import com.huk911.apexlegends.models.Weapon
-
 class Floor {
 
     val items: MutableList<Item> = mutableListOf(
@@ -20,34 +18,34 @@ class Floor {
         Weapon("Kraber", Rarity.LEGENDARY, 150, 6)
     )
 
-    private var shownSlotNumber = 0
+    private var currentSelectedIndex = 0
 
-    val shownItem: Item?
+    val currentSelectedItem: Item?
         get() = if (items.isEmpty()) {
             null
         } else {
-            items[shownSlotNumber]
+            items[currentSelectedIndex]
         }
 
     fun moveToNextItem(): Item? {
         if (items.isEmpty()) {
             return null
         }
-        shownSlotNumber += 1
-        if (shownSlotNumber > items.size - 1) {
-            shownSlotNumber = 0
+        currentSelectedIndex += 1
+        if (currentSelectedIndex > items.size - 1) {
+            currentSelectedIndex = 0
         }
-        return items[shownSlotNumber]
+        return items[currentSelectedIndex]
     }
 
-    fun takeShownItem(): Item? {
+    fun takeCurrentSelectedItem(): Item? {
         if (items.isEmpty()) {
             return null
         }
-        val shownItem = items[shownSlotNumber]
-        items.removeAt(shownSlotNumber)
-        if (shownSlotNumber > items.size - 1) {
-            shownSlotNumber = 0
+        val shownItem = items[currentSelectedIndex]
+        items.removeAt(currentSelectedIndex)
+        if (currentSelectedIndex > items.size - 1) {
+            currentSelectedIndex = 0
         }
         return shownItem
     }
@@ -60,7 +58,7 @@ class Floor {
         if (slotNumber < 0 || slotNumber > items.size - 1) {
             return
         }
-        shownSlotNumber = slotNumber
+        currentSelectedIndex = slotNumber
 
     }
 }

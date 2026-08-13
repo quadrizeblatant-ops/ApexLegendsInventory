@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.graphics.Color
+import android.media.SoundPool
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
     private lateinit var dropSecHandButton: Button
     private lateinit var healthProgress: ProgressBar
     private lateinit var swapButton: ImageButton
+
+    private lateinit var soundPool: SoundPool
+    private var knockdownSound: Int = 0
 
     private val backpackAdapter = BackpackAdapter(inventory)
 
@@ -103,6 +107,12 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
             showInfo("Оружие свапнуто")
             renderHands()
         }
+
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(5)
+            .build()
+
+        knockdownSound = soundPool.load(this, R.raw.knockdown_sound, 1)
 
         recycleButton.setOnClickListener {
             val recycledItem = inventory.recycleCurrentSelectedItem()
@@ -258,6 +268,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher {
 
     override fun onPlayerKnocked() {
         Log.i("govno", "knocked")
+        soundPool.play(knockdownSound, 1f, 1f, 1, 0, 1f)
     }
 
     override fun onPlayerRevived() {

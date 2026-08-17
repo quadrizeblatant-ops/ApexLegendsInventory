@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
     private lateinit var floorCounter: TextView
     private lateinit var materialsCard: TextView
 
+    private lateinit var knockdownBanner: TextView
+
     private lateinit var recycleButton: Button
     private lateinit var recycleFloorButton: Button
     private lateinit var useButton: Button
@@ -92,6 +94,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         pickButton = findViewById(R.id.btn_floor_pick)
         recycleFloorButton = findViewById(R.id.btn_recycle_floor)
 
+        knockdownBanner = findViewById(R.id.tv_knockdown_banner)
         handCard = findViewById(R.id.tv_main_hand_card)
         secHandCard = findViewById(R.id.tv_sec_hand_card)
         equipButton = findViewById(R.id.btn_equip)
@@ -285,10 +288,12 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
     override fun onPlayerKnocked() {
         Log.i("govno", "knocked")
+        knockdownBanner.visibility = View.VISIBLE
         soundPool.play(knockdownSound, 1f, 1f, 1, 0, 1f)
     }
 
     override fun onPlayerRevived() {
+        knockdownBanner.visibility = View.GONE
         Log.i("govno", "revived")
     }
 

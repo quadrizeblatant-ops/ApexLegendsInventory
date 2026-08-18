@@ -1,5 +1,8 @@
 package com.huk911.apexlegends.models
 
+import android.util.Log
+import kotlin.math.log
+
 class Floor {
 
     val items: MutableList<Item> = mutableListOf(
@@ -44,6 +47,8 @@ class Floor {
         }
         val shownItem = items[currentSelectedIndex]
         items.removeAt(currentSelectedIndex)
+        Log.i("govno", "предмет удалён:  " + shownItem.name)
+        Log.i("govno", items.toString())
         if (currentSelectedIndex > items.size - 1) {
             currentSelectedIndex = 0
         }

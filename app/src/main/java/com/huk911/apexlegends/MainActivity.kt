@@ -1,5 +1,6 @@
 package com.huk911.apexlegends
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
     private lateinit var equipButton: Button
     private lateinit var dropHandButton: Button
     private lateinit var dropSecHandButton: Button
+    private lateinit var inspectButton: Button
     private lateinit var healthProgress: ProgressBar
     private lateinit var swapButton: ImageButton
 
@@ -93,6 +95,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
         pickButton = findViewById(R.id.btn_floor_pick)
         recycleFloorButton = findViewById(R.id.btn_recycle_floor)
+        inspectButton = findViewById(R.id.btn_inspect)
 
         knockdownBanner = findViewById(R.id.tv_knockdown_banner)
         handCard = findViewById(R.id.tv_main_hand_card)
@@ -108,6 +111,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
         inventory.knockdownWatcher = this
         backpackAdapter.selectionWatcher = this
+        floorAdapter.selectionWatcher = this
 
         swapButton.setOnClickListener {
             inventory.swapWeapon()
@@ -139,11 +143,23 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
                 inventory.recycle(selectedItem)
                 val scrapMaterials = selectedItem.calculateScrapMaterials()
                 showInfo("Переработано: " + selectedItem.name + " + " + scrapMaterials + " Материалов")
+                renderFloor()
             } else {
                 showInfo("Это нельзя переработать")
             }
             renderBackpack()
         }
+
+        inspectButton.setOnClickListener {
+            val selectedItem = inventory.currentSelectedItem
+            if (selectedItem != null) {
+                val intent = Intent(this, ItemDetailActivity::class.java)
+                startActivity(intent)
+            } else {
+                showInfo("Нечего осматривать")
+            }
+        }
+
 
 
         dropHandButton.setOnClickListener {
@@ -250,7 +266,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         equipButton.isEnabled = !isBackpackEmpty && inventory.currentSelectedItem is Weapon
         useButton.isEnabled = !isBackpackEmpty
         dropButton.isEnabled = !isBackpackEmpty
-//        recycleButton.isEnabled = inventory.currentSelectedItem is Recyclable
+        recycleButton.isEnabled = inventory.currentSelectedItem is Recyclable
         materialsCard.text = "Материалов: " + inventory.materials
     }
 
@@ -260,6 +276,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         floorCounter.text = "Предметов на полу: " + floor.items.size
         floorAdapter.notifyDataSetChanged()
         pickButton.isEnabled = !isFloorEmpty
+        recycleFloorButton.isEnabled = floor.currentSelectedItem is Recyclable
     }
 
     private fun renderHealth() {
@@ -299,5 +316,6 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
     override fun onItemSelected(item: Item) {
         renderBackpack()
+        renderFloor()
     }
 }

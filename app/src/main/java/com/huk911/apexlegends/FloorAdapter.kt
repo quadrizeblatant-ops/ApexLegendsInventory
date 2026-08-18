@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.huk911.apexlegends.models.Floor
 import com.huk911.apexlegends.models.Rarity
+import com.huk911.apexlegends.models.SelectionWatcher
 
 class FloorAdapter (private val floor: Floor) :
     RecyclerView.Adapter<FloorAdapter.FloorViewHolder>() {
-
+    var selectionWatcher: SelectionWatcher? = null
     class FloorViewHolder(val rowView: View) : RecyclerView.ViewHolder(rowView) {
         val rowCardFloor: TextView = rowView.findViewById(R.id.tv_row_item_floor)
         val valueCard: TextView = rowView.findViewById(R.id.tv_value)
@@ -43,7 +44,8 @@ class FloorAdapter (private val floor: Floor) :
 
         holder.rowView.setOnClickListener {
             floor.selectSlot(position)
-            notifyDataSetChanged()
+            selectionWatcher?.onItemSelected(item)
+//            notifyDataSetChanged()
         }
     }
 

@@ -38,9 +38,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
     private lateinit var inventoryCounter: TextView
     private lateinit var floorCounter: TextView
     private lateinit var materialsCard: TextView
-
     private lateinit var knockdownBanner: TextView
-
     private lateinit var recycleButton: Button
     private lateinit var recycleFloorButton: Button
     private lateinit var useButton: Button
@@ -50,18 +48,14 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
     private lateinit var dropHandButton: Button
     private lateinit var dropSecHandButton: Button
     private lateinit var inspectButton: Button
+    private lateinit var inspectFloorButton: Button
     private lateinit var healthProgress: ProgressBar
     private lateinit var swapButton: ImageButton
-
     private lateinit var soundPool: SoundPool
     private var knockdownSound: Int = 0
-
     private val backpackAdapter = BackpackAdapter(inventory)
-
     private lateinit var backpackList: RecyclerView
-
     private val floorAdapter = FloorAdapter(floor)
-
     private lateinit var floorList: RecyclerView
 
 
@@ -96,6 +90,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         pickButton = findViewById(R.id.btn_floor_pick)
         recycleFloorButton = findViewById(R.id.btn_recycle_floor)
         inspectButton = findViewById(R.id.btn_inspect)
+        inspectFloorButton = findViewById(R.id.btn_inspect_floor)
 
         knockdownBanner = findViewById(R.id.tv_knockdown_banner)
         handCard = findViewById(R.id.tv_main_hand_card)
@@ -154,6 +149,18 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
             val selectedItem = inventory.currentSelectedItem
             if (selectedItem != null) {
                 val intent = Intent(this, ItemDetailActivity::class.java)
+                intent.putExtra(EXTRA_ITEM, selectedItem)
+                startActivity(intent)
+            } else {
+                showInfo("Нечего осматривать")
+            }
+        }
+
+        inspectFloorButton.setOnClickListener {
+            val selectedItem = floor.currentSelectedItem
+            if (selectedItem != null) {
+                val intent = Intent(this, ItemDetailActivity::class.java)
+                intent.putExtra(EXTRA_ITEM, selectedItem)
                 startActivity(intent)
             } else {
                 showInfo("Нечего осматривать")
@@ -266,6 +273,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         equipButton.isEnabled = !isBackpackEmpty && inventory.currentSelectedItem is Weapon
         useButton.isEnabled = !isBackpackEmpty
         dropButton.isEnabled = !isBackpackEmpty
+        inspectButton.isEnabled = !isBackpackEmpty
         recycleButton.isEnabled = inventory.currentSelectedItem is Recyclable
         materialsCard.text = "Материалов: " + inventory.materials
     }

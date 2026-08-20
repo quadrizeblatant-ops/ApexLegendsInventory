@@ -19,6 +19,7 @@ class ItemDetailActivity : AppCompatActivity() {
         val nameCard: TextView = findViewById(R.id.detailNameCard)
         val descriptionCard: TextView = findViewById(R.id.detailDescriptionCard)
         val itemImage: ImageView = findViewById(R.id.detailImage)
+        val magImage: ImageView = findViewById(R.id.img_mag)
 
         val rawItem = intent.getSerializableExtra(EXTRA_ITEM)
         if (rawItem is Item) {
@@ -27,6 +28,10 @@ class ItemDetailActivity : AppCompatActivity() {
             descriptionCard.text = description
             val imageResource = pickItemImage(rawItem.name)
             itemImage.setImageResource(imageResource)
+
+
+            val attachmentResource = pickAttachmentImage(rawItem)
+            magImage.setImageResource(attachmentResource)
         } else {
             nameCard.text = "Неизвестный предмет"
         }
@@ -34,7 +39,7 @@ class ItemDetailActivity : AppCompatActivity() {
 
     private fun buildItemDescription(item: Item): String {
         val statsLine = when (item) {
-            is Weapon -> "Урон: " + item.damage + "\n" + "Магазин: " + item.magSize
+            is Weapon -> "Урон: " + item.damage + "\n" + "Магазин: " + item.magSize + "\n" + "Тип патронов: " + item.ammoType
             is Consumable -> "Лечит: +" + item.healAmount + " HP"
             is Grenade -> "Урон взрыва: " + item.blastDamage
             else -> "Особых свойств нет"
@@ -54,7 +59,14 @@ class ItemDetailActivity : AppCompatActivity() {
         else -> R.drawable.ic_item_placeholder
     }
 
-
+    private fun pickAttachmentImage(item: Item): Int = when (item) {
+        is Weapon -> when (item.ammoType) {
+            "Light" -> R.drawable.maglight
+            "Heavy" -> R.drawable.magheavy
+            else -> R.drawable.mag_placeholder
+        }
+        else -> R.drawable.mag_placeholder
+    }
 
 
 }

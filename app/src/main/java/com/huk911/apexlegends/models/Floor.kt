@@ -1,24 +1,25 @@
 package com.huk911.apexlegends.models
 
+import android.hardware.lights.Light
 import android.util.Log
 import kotlin.math.log
 
 class Floor {
 
     val items: MutableList<Item> = mutableListOf(
-        Weapon("Flatline", Rarity.COMMON, 16, 20),
+        Weapon("Flatline", Rarity.COMMON, 16, 20, "Heavy"),
         Consumable("Shield Battery", Rarity.RARE, 100),
         Grenade("Thermite", Rarity.RARE, 90),
-        Weapon("R-301", Rarity.RARE, 14, 18),
+        Weapon("R-301", Rarity.RARE, 14, 18, "Light"),
         Consumable("Syringe", Rarity.COMMON, 25),
         Grenade("Arc Star", Rarity.RARE, 75),
         Grenade("Arc Star", Rarity.RARE, 75),
         Grenade("Arc Star", Rarity.RARE, 75),
         Grenade("Arc Star", Rarity.RARE, 75),
-        Weapon("Hemlok", Rarity.RARE, 17, 16),
-        Weapon("R-99", Rarity.COMMON, 11, 18),
+        Weapon("Hemlok", Rarity.RARE, 17, 16, "Heavy"),
+        Weapon("R-99", Rarity.COMMON, 11, 18, "Light"),
         Consumable("Med Kit", Rarity.RARE, 100),
-        Weapon("Kraber", Rarity.LEGENDARY, 150, 6)
+        Weapon("Kraber", Rarity.LEGENDARY, 150, 6, "Sniper")
     )
 
     private var currentSelectedIndex = 0

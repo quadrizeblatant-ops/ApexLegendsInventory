@@ -3,9 +3,10 @@ package com.huk911.apexlegends.models
 class Weapon(
     name: String,
     rarity: Rarity,
+    val ammoType: AmmoType,
     val damage: Int,
     val magSize: Int,
-    val ammoType: String
+
 ) : Item(name, rarity), Recyclable {
     fun getCard(): String {
         val deadlyText = if (isDeadly) {
@@ -25,7 +26,7 @@ class Weapon(
 
     override fun toString(): String {
         val baseCard = super.toString()
-        return baseCard + ", урон " + damage + ", магазин " + magSize + "Тип патронов: " + ammoType
+        return baseCard + ", урон " + damage + ", магазин " + magSize + "Тип патронов: "
     }
 
     val isDeadly: Boolean

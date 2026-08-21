@@ -7,19 +7,19 @@ import kotlin.math.log
 class Floor {
 
     val items: MutableList<Item> = mutableListOf(
-        Weapon("Flatline", Rarity.COMMON, 16, 20, "Heavy"),
+        Weapon("Flatline", Rarity.COMMON, AmmoType.HEAVY, 20, 18),
         Consumable("Shield Battery", Rarity.RARE, 100),
         Grenade("Thermite", Rarity.RARE, 90),
-        Weapon("R-301", Rarity.RARE, 14, 18, "Light"),
+        Weapon("R-301", Rarity.RARE, AmmoType.LIGHT, 18, 14),
         Consumable("Syringe", Rarity.COMMON, 25),
         Grenade("Arc Star", Rarity.RARE, 75),
         Grenade("Arc Star", Rarity.RARE, 75),
         Grenade("Arc Star", Rarity.RARE, 75),
         Grenade("Arc Star", Rarity.RARE, 75),
-        Weapon("Hemlok", Rarity.RARE, 17, 16, "Heavy"),
-        Weapon("R-99", Rarity.COMMON, 11, 18, "Light"),
+        Weapon("Hemlok", Rarity.RARE, AmmoType.HEAVY, 16, 17),
+        Weapon("R-99", Rarity.COMMON, AmmoType.LIGHT, 18, 11),
         Consumable("Med Kit", Rarity.RARE, 100),
-        Weapon("Kraber", Rarity.LEGENDARY, 150, 6, "Sniper")
+        Weapon("Kraber", Rarity.LEGENDARY, AmmoType.SNIPER, 6, 5)
     )
 
     private var currentSelectedIndex = 0

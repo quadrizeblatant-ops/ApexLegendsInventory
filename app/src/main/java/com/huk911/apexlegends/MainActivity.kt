@@ -15,6 +15,7 @@ import android.media.SoundPool
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.huk911.apexlegends.models.Consumable
@@ -29,8 +30,7 @@ import com.huk911.apexlegends.models.Weapon
 
 class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
-    private val inventory = Inventory()
-    private val floor = Floor()
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var healthBarCard: TextView
     private lateinit var infoCard: TextView
     private lateinit var handCard: TextView
@@ -53,12 +53,12 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
     private lateinit var swapButton: ImageButton
     private lateinit var soundPool: SoundPool
     private var knockdownSound: Int = 0
-    private val backpackAdapter = BackpackAdapter(inventory)
     private lateinit var backpackList: RecyclerView
-    private val floorAdapter = FloorAdapter(floor)
     private lateinit var floorList: RecyclerView
 
 
+    private lateinit var backpackAdapter: BackpackAdapter
+    private lateinit var floorAdapter: FloorAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,15 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         this.enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        Log.i("govno", this.toString())
+        Log.i("govno", viewModel.toString())
+
         applyInsets()
+
+        backpackAdapter = BackpackAdapter(viewModel.inventory)
+        floorAdapter = FloorAdapter(viewModel.floor)
+
+
 
         backpackList = findViewById(R.id.rv_backpack)
         backpackList.layoutManager = LinearLayoutManager(this)
@@ -102,14 +110,13 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         inventoryCounter = findViewById(R.id.tv_items_counter)
         floorCounter = findViewById(R.id.tv_floor_items_counter)
 
-        healthProgress.progress = inventory.health
-
-        inventory.knockdownWatcher = this
+        healthProgress.progress = viewModel.inventory.health
+        viewModel.inventory.knockdownWatcher = this
         backpackAdapter.selectionWatcher = this
         floorAdapter.selectionWatcher = this
 
         swapButton.setOnClickListener {
-            inventory.swapWeapon()
+            viewModel.inventory.swapWeapon()
             showInfo("Оружие свапнуто")
             renderHands()
         }
@@ -121,7 +128,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         knockdownSound = soundPool.load(this, R.raw.knockdown_sound, 1)
 
         recycleButton.setOnClickListener {
-            val recycledItem = inventory.recycleCurrentSelectedItem()
+            val recycledItem = viewModel.inventory.recycleCurrentSelectedItem()
             if (recycledItem is Recyclable) {
                val scrapMaterials = recycledItem.calculateScrapMaterials()
                showInfo("Переработано: " + recycledItem.name + "+ " + scrapMaterials + " материалов")
@@ -132,10 +139,10 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         recycleFloorButton.setOnClickListener {
-            val selectedItem = floor.currentSelectedItem
+            val selectedItem = viewModel.floor.currentSelectedItem
             if (selectedItem is Recyclable) {
-                floor.takeCurrentSelectedItem()
-                inventory.recycle(selectedItem)
+                viewModel.floor.takeCurrentSelectedItem()
+                viewModel.inventory.recycle(selectedItem)
                 val scrapMaterials = selectedItem.calculateScrapMaterials()
                 showInfo("Переработано: " + selectedItem.name + " + " + scrapMaterials + " Материалов")
                 renderFloor()
@@ -146,7 +153,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         inspectButton.setOnClickListener {
-            val selectedItem = inventory.currentSelectedItem
+            val selectedItem = viewModel.inventory.currentSelectedItem
             if (selectedItem != null) {
                 val intent = Intent(this, ItemDetailActivity::class.java)
                 intent.putExtra(EXTRA_ITEM, selectedItem)
@@ -157,7 +164,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         inspectFloorButton.setOnClickListener {
-            val selectedItem = floor.currentSelectedItem
+            val selectedItem = viewModel.floor.currentSelectedItem
             if (selectedItem != null) {
                 val intent = Intent(this, ItemDetailActivity::class.java)
                 intent.putExtra(EXTRA_ITEM, selectedItem)
@@ -170,9 +177,9 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
 
         dropHandButton.setOnClickListener {
-            val droppedItem = inventory.dropPrimaryWeapon()
+            val droppedItem = viewModel.inventory.dropPrimaryWeapon()
             if (droppedItem != null) {
-                floor.addItem(droppedItem)
+                viewModel.floor.addItem(droppedItem)
                 showInfo("Предмет выброшен: $droppedItem")
                 renderFloor()
                 renderHands()
@@ -183,9 +190,9 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         dropSecHandButton.setOnClickListener {
-            val droppedItem = inventory.dropSecondaryWeapon()
+            val droppedItem = viewModel.inventory.dropSecondaryWeapon()
             if (droppedItem != null) {
-                floor.addItem(droppedItem)
+                viewModel.floor.addItem(droppedItem)
                 showInfo("Предмет выброшен: $droppedItem")
                 renderFloor()
                 renderHands()
@@ -196,7 +203,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         equipButton.setOnClickListener {
-            val equippedItem = inventory.equipSelectedWeapon()
+            val equippedItem = viewModel.inventory.equipSelectedWeapon()
             if (equippedItem != null) {
                 renderHands()
                 renderBackpack()
@@ -207,7 +214,7 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         useButton.setOnClickListener {
-            val itemUsed = inventory.useCurrentSelectedItem()
+            val itemUsed = viewModel.inventory.useCurrentSelectedItem()
             when (itemUsed) {
                 is Consumable -> showInfo("Подхилено: +" + itemUsed.healAmount + " HP")
                 is Grenade -> showInfo("Подзворвано: -" + itemUsed.blastDamage + " HP")
@@ -217,9 +224,9 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         pickButton.setOnClickListener {
-            val pickedItem = floor.takeCurrentSelectedItem()
+            val pickedItem = viewModel.floor.takeCurrentSelectedItem()
             if (pickedItem != null) {
-                inventory.pickUp(pickedItem)
+                viewModel.inventory.pickUp(pickedItem)
                 renderBackpack()
                 renderFloor()
                 showInfo("Подобран предмет: $pickedItem")
@@ -229,15 +236,20 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
         }
 
         dropButton.setOnClickListener {
-            val droppedItem = inventory.dropItemFromBackpack()
+            val droppedItem = viewModel.inventory.dropItemFromBackpack()
             if (droppedItem != null) {
-                floor.addItem(droppedItem)
+                viewModel.floor.addItem(droppedItem)
                 showInfo("Предмет выброшен: $droppedItem")
                 renderFloor()
                 renderBackpack()
             } else showInfo("Нечего выбрасывать")
         }
         renderScreen()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveGame()
     }
 
     private fun applyInsets() {
@@ -259,39 +271,44 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
     }
 
     private fun renderHands() {
-        handCard.text = inventory.primaryWeapon?.toString() ?: "Рука пуста"
-        secHandCard.text = inventory.secondaryWeapon?.toString() ?: "Рука пуста"
-        dropHandButton.isEnabled = inventory.primaryWeapon != null
-        dropSecHandButton.isEnabled = inventory.secondaryWeapon != null
-        swapButton.isEnabled = inventory.primaryWeapon != null || inventory.secondaryWeapon != null
+        handCard.text = viewModel.inventory.primaryWeapon?.toString() ?: "Рука пуста"
+        secHandCard.text = viewModel.inventory.secondaryWeapon?.toString() ?: "Рука пуста"
+        dropHandButton.isEnabled = viewModel.inventory.primaryWeapon != null
+        dropSecHandButton.isEnabled = viewModel.inventory.secondaryWeapon != null
+        swapButton.isEnabled = viewModel.inventory.primaryWeapon != null || viewModel.inventory.secondaryWeapon != null
     }
 
     private fun renderBackpack() {
-        val isBackpackEmpty = inventory.backpack.isEmpty()
-        inventoryCounter.text = "Предметов: " + inventory.backpack.size
+        val isBackpackEmpty = viewModel.inventory.backpack.isEmpty()
+        inventoryCounter.text = "Предметов: " + viewModel.inventory.backpack.size
         backpackAdapter.notifyDataSetChanged()
-        equipButton.isEnabled = !isBackpackEmpty && inventory.currentSelectedItem is Weapon
+        equipButton.isEnabled = !isBackpackEmpty && viewModel.inventory.currentSelectedItem is Weapon
         useButton.isEnabled = !isBackpackEmpty
         dropButton.isEnabled = !isBackpackEmpty
         inspectButton.isEnabled = !isBackpackEmpty
-        recycleButton.isEnabled = inventory.currentSelectedItem is Recyclable
-        materialsCard.text = "Материалов: " + inventory.materials
+        recycleButton.isEnabled = viewModel.inventory.currentSelectedItem is Recyclable
+        materialsCard.text = "Материалов: " + viewModel.inventory.materials
     }
 
 
     private fun renderFloor() {
-        val isFloorEmpty = floor.items.isEmpty()
-        floorCounter.text = "Предметов на полу: " + floor.items.size
+        val isFloorEmpty = viewModel.floor.items.isEmpty()
+        floorCounter.text = "Предметов на полу: " + viewModel.floor.items.size
         floorAdapter.notifyDataSetChanged()
         pickButton.isEnabled = !isFloorEmpty
-        recycleFloorButton.isEnabled = floor.currentSelectedItem is Recyclable
+        recycleFloorButton.isEnabled = viewModel.floor.currentSelectedItem is Recyclable
     }
 
     private fun renderHealth() {
-        healthBarCard.text = "HP: " + inventory.health
-        healthProgress.progress = inventory.health
-        val healthColor = pickHealthColor(inventory.health)
+        healthBarCard.text = "HP: " + viewModel.inventory.health + ", Нокдаунов: " + viewModel.inventory.knockdownCounter
+        healthProgress.progress = viewModel.inventory.health
+        val healthColor = pickHealthColor(viewModel.inventory.health)
         healthProgress.progressTintList = ColorStateList.valueOf(healthColor)
+        if (viewModel.inventory.health == 0) {
+            knockdownBanner.visibility = View.VISIBLE
+        } else {
+            knockdownBanner.visibility = View.GONE
+        }
     }
 
     private fun renderScreen() {
@@ -313,12 +330,10 @@ class MainActivity : AppCompatActivity(), KnockdownWatcher, SelectionWatcher {
 
     override fun onPlayerKnocked() {
         Log.i("govno", "knocked")
-        knockdownBanner.visibility = View.VISIBLE
         soundPool.play(knockdownSound, 1f, 1f, 1, 0, 1f)
     }
 
     override fun onPlayerRevived() {
-        knockdownBanner.visibility = View.GONE
         Log.i("govno", "revived")
     }
 

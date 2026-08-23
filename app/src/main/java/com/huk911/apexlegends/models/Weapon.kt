@@ -26,7 +26,7 @@ class Weapon(
 
     override fun toString(): String {
         val baseCard = super.toString()
-        return baseCard + ", урон " + damage + ", магазин " + magSize + "Тип патронов: "
+        return baseCard + ", урон " + damage + ", магазин " + magSize
     }
 
     val isDeadly: Boolean

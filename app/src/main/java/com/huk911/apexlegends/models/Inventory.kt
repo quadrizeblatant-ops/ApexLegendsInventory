@@ -16,6 +16,8 @@ class Inventory {
     )
     var primaryWeapon: Weapon? = null
     var secondaryWeapon: Weapon? = null
+
+    var knockdownCounter = 0
     var health = 42
     var materials = 0
 
@@ -73,6 +75,7 @@ class Inventory {
                 if (health <= 0) {
                     health = 0
                     knockdownWatcher?.onPlayerKnocked()
+                    knockdownCounter++
                 }
                 backpack.removeAt(currentSelectedIndex)
                 keepSlotInBounds()

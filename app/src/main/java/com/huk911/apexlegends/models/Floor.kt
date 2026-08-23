@@ -48,8 +48,6 @@ class Floor {
         }
         val shownItem = items[currentSelectedIndex]
         items.removeAt(currentSelectedIndex)
-        Log.i("govno", "предмет удалён:  " + shownItem.name)
-        Log.i("govno", items.toString())
         if (currentSelectedIndex > items.size - 1) {
             currentSelectedIndex = 0
         }

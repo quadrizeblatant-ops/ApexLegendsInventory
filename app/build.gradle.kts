@@ -42,4 +42,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
     implementation(libs.recyclerview)
+    implementation(libs.lifecycle.viewmodel.ktx)
+
 }

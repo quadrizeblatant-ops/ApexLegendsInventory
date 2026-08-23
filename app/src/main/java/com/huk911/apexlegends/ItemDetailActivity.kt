@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.huk911.apexlegends.models.AmmoType
 import com.huk911.apexlegends.models.Consumable
+import com.huk911.apexlegends.models.Floor
 import com.huk911.apexlegends.models.Grenade
 import com.huk911.apexlegends.models.Inventory
 import com.huk911.apexlegends.models.Item
@@ -64,8 +65,6 @@ class ItemDetailActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun buildItemDescription(item: Item): String {
         val statsLine = when (item) {
             is Weapon -> "Урон: " + item.damage + "\n" + "Магазин: " + item.magSize + "\n" + "Тип патронов: " + item.ammoType
@@ -96,6 +95,12 @@ class ItemDetailActivity : AppCompatActivity() {
         }
         else -> R.drawable.mag_placeholder
     }
+
+//    private fun showHeavyAttachments(weapon: Weapon): Int {
+//        return when (weapon.ammoType) {
+//            AmmoType.HEAVY ->
+//        }
+//    }
 
 
 }
